@@ -1,0 +1,584 @@
+﻿@{
+    ViewData["Title"] = "Thống Kê";
+}
+
+<h2 class="text-center text-primary mb-4"><i class="fas fa-chart-line"></i> Thống Kê Toàn Hệ Thống</h2>
+<button class="btn btn-success mb-3" onclick="exportExcel()">
+    <i class="fas fa-file-excel"></i> Xuất Báo Cáo
+</button>
+
+
+<!-- Tổng quan -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card bg-info text-white text-center">
+            <div class="card-body">
+                <h5 class="card-title">Tổng Số Sinh Viên</h5>
+                <h2 id="tongSoSinhVien" class="display-4">0</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-success text-white text-center">
+            <div class="card-body">
+                <h5 class="card-title">Tổng Số Nhóm</h5>
+                <h2 id="tongSoNhom" class="display-4">0</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card bg-warning text-dark text-center">
+            <div class="card-body">
+                <h5 class="card-title">Tổng Số Cuộc Thi</h5>
+                <h2 id="tongSoCuocThi" class="display-4">0</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thống kê dạng biểu đồ -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-users"></i> Số Lượng Sinh Viên Tham Gia Theo Cuộc Thi
+            </div>
+            <div class="card-body">
+                <canvas id="sinhVienChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-users-cog"></i> Số Lượng Nhóm Tham Gia Theo Cuộc Thi
+            </div>
+            <div class="card-body">
+                <canvas id="nhomChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Thống kê dạng bảng -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <i class="fas fa-table"></i> Bảng Thống Kê Sinh Viên và Nhóm Theo Cuộc Thi
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>STT</th>
+                    <th>Tên Cuộc Thi</th>
+                    <th>Số Lượng Sinh Viên</th>
+                    <th>Số Lượng Nhóm</th>
+                </tr>
+            </thead>
+            <tbody id="thongKeTableBody"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Thẻ tổng quan -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-info text-white text-center">
+            <div class="card-body">
+                <h5 class="card-title">Tổng Số Đề Tài</h5>
+                <h2 id="tongDeTai" class="display-4">0</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white text-center">
+            <div class="card-body">
+                <h5 class="card-title">Tổng Số Cuộc Thi</h5>
+                <h2 id="tongCuocThi" class="display-4">0</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white text-center">
+            <div class="card-body">
+                <h5 class="card-title">Tổng Số Giải Thưởng</h5>
+                <h2 id="tongGiaiThuong" class="display-4">0</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-danger text-white text-center">
+            <div class="card-body">
+                <h5 class="card-title">Tổng Số Giám Khảo</h5>
+                <h2 id="tongGiamKhao" class="display-4">0</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Biểu đồ thống kê -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-trophy"></i> Số Lượng Đề Tài Đạt Giải Theo Cuộc Thi
+            </div>
+            <div class="card-body">
+                <canvas id="deTaiDatGiaiChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-dollar-sign"></i> Tổng Tiền Thưởng Theo Cuộc Thi
+            </div>
+            <div class="card-body">
+                <canvas id="tienThuongChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <i class="fas fa-book"></i> Số Lượng Đề Tài Theo Lĩnh Vực
+            </div>
+            <div class="card-body">
+                <canvas id="deTaiTheoLinhVucChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-danger text-white">
+                <i class="fas fa-users"></i> Số Lượng Sinh Viên và Nhóm Theo Cuộc Thi
+            </div>
+            <div class="card-body">
+                <canvas id="sinhVienNhomChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <i class="fas fa-graduation-cap"></i> Thống Kê Số Lượng Sinh Viên và Giảng Viên Theo Khoa
+            </div>
+            <div class="card-body">
+                <canvas id="sinhVienGvKhoaChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <i class="fas fa-layer-group"></i> Thống Kê Số Lượng Khoa và Lĩnh Vực
+            </div>
+            <div class="card-body">
+                <canvas id="khoaLinhVucChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- Thống kê dạng bảng -->
+<div class="card mb-4">
+    <div class="card-header bg-dark text-white">
+        <i class="fas fa-table"></i> Thống Kê Đề Tài Bị Loại Qua Các Vòng Thi
+    </div>
+    <div class="card-body">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+                <tr>
+                    <th>STT</th>
+                    <th>Tên Vòng Thi</th>
+                    <th>Số Lượng Đề Tài Bị Loại</th>
+                </tr>
+            </thead>
+            <tbody id="deTaiBiLoaiTable"></tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Scripts -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<style>
+
+    /* Table Styling */
+    .table {
+        background-color: #ffffff;
+        border-collapse: separate;
+        border-spacing: 0;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+            padding: 15px;
+            font-size: 1rem;
+        }
+
+        .table th {
+            background-color: #343a40;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 0;
+        }
+
+        .table tbody tr {
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .table tbody tr:hover {
+                background-color: #f1f1f1;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            }
+
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #e9ecef;
+    }
+
+    .table-bordered {
+        border: 1px solid #ddd;
+    }
+
+        .table-bordered th, .table-bordered td {
+            border: 1px solid #ddd;
+        }
+
+    /* Scrollable Table for Smaller Screens */
+    .table-responsive {
+        border-radius: 10px;
+        overflow-x: auto;
+    }
+
+        .table-responsive::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .table-responsive::-webkit-scrollbar-thumb {
+            background: #6c757d;
+            border-radius: 5px;
+        }
+
+            .table-responsive::-webkit-scrollbar-thumb:hover {
+                background: #495057;
+            }
+
+</style>
+<script>
+    $(document).ready(function () {
+        loadTongQuan();
+        loadThongKeCharts();
+        loadDeTaiBiLoaiTable();
+    });
+
+    function exportExcel() {
+        window.location.href = "/Admin/ThongKe/ExportThongKeToExcel";
+    }
+
+    // Tổng quan
+    function loadTongQuan() {
+        $.get("/Admin/ThongKe/TongSoLuongSinhVienVaNhom", function (data) {
+            $("#tongSoSinhVien").text(data.tongSoSinhVien);
+            $("#tongSoNhom").text(data.tongSoNhom);
+        });
+
+        $.get("/Admin/ThongKe/ThongKeSoLuongNhomTheoCuocThi", function (data) {
+            $("#tongSoCuocThi").text(data.length);
+        });
+
+        $.get("/Admin/ThongKe/GetTongSoLuong", function (data) {
+            $("#tongDeTai").text(data.tongDeTai);
+            $("#tongCuocThi").text(data.tongCuocThi);
+            $("#tongGiaiThuong").text(data.tongGiaiThuong);
+            $("#tongGiamKhao").text(data.tongGiamKhao);
+        });
+    }
+
+    // Thống kê biểu đồ
+    function loadThongKeCharts() {
+        // Biểu đồ sinh viên
+        $.get("/Admin/ThongKe/ThongKeSoLuongSinhVienTheoCuocThi", function (data) {
+            const labels = data.map(item => item.tenCuocThi);
+            const values = data.map(item => item.soLuongSinhVien);
+
+            new Chart($("#sinhVienChart"), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Số Lượng Sinh Viên',
+                        data: values,
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Số Lượng Sinh Viên Tham Gia' }
+                    }
+                }
+            });
+        });
+
+        // Biểu đồ nhóm
+        $.get("/Admin/ThongKe/ThongKeSoLuongNhomTheoCuocThi", function (data) {
+            const labels = data.map(item => item.tenCuocThi);
+            const values = data.map(item => item.soLuongNhom);
+
+            new Chart($("#nhomChart"), {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Số Lượng Nhóm',
+                        data: values,
+                        backgroundColor: ['rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)'],
+                        borderColor: ['rgba(255, 99, 132, 1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        title: { display: true, text: 'Số Lượng Nhóm Tham Gia' }
+                    }
+                }
+            });
+        });
+
+        // Thống kê bảng
+        $.get("/Admin/ThongKe/ThongKeSoLuongSinhVienTheoCuocThi", function (sinhVienData) {
+            $.get("/Admin/ThongKe/ThongKeSoLuongNhomTheoCuocThi", function (nhomData) {
+                const tbody = $("#thongKeTableBody");
+                tbody.empty();
+                sinhVienData.forEach((sinhVienItem, index) => {
+                    const nhomItem = nhomData.find(n => n.maCuocThi === sinhVienItem.maCuocThi);
+                    tbody.append(`
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${sinhVienItem.tenCuocThi}</td>
+                                <td>${sinhVienItem.soLuongSinhVien}</td>
+                                <td>${nhomItem ? nhomItem.soLuongNhom : 0}</td>
+                            </tr>
+                        `);
+                });
+            });
+        });
+        // Đề tài đạt giải
+        $.get("/Admin/ThongKe/ThongKeDeTaiDatGiai", function (data) {
+            const labels = data.map(item => item.tenCuocThi);
+            const values = data.map(item => item.soLuongDeTaiDatGiai);
+
+            new Chart($("#deTaiDatGiaiChart"), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Số Lượng Đề Tài Đạt Giải',
+                        data: values,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Đề Tài Đạt Giải' }
+                    }
+                }
+            });
+        });
+
+        // Tổng tiền thưởng
+        $.get("/Admin/ThongKe/ThongKeTongTienThuongTheoCuocThi", function (data) {
+            const labels = data.map(item => item.tenCuocThi);
+            const values = data.map(item => item.tongTienThuong);
+
+            new Chart($("#tienThuongChart"), {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Tổng Tiền Thưởng',
+                        data: values,
+                        backgroundColor: 'rgba(255, 206, 86, 0.6)',
+                        borderColor: 'rgba(255, 206, 86, 1)',
+                        borderWidth: 2
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: true, text: 'Tổng Tiền Thưởng' }
+                    }
+                }
+            });
+        });
+
+        // Đề tài theo lĩnh vực
+        $.get("/Admin/ThongKe/ThongKeDeTaiTheoLinhVuc", function (data) {
+            const labels = data.map(item => item.tenLinhVuc);
+            const values = data.map(item => item.soLuongDeTai);
+
+            new Chart($("#deTaiTheoLinhVucChart"), {
+                type: 'pie',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Số Lượng Đề Tài',
+                        data: values,
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        title: { display: true, text: 'Đề Tài Theo Lĩnh Vực' }
+                    }
+                }
+            });
+        });
+
+        // Sinh viên và nhóm theo cuộc thi
+        $.get("/Admin/ThongKe/ThongKeSoLuongSinhVienTheoCuocThi", function (sinhVienData) {
+            $.get("/Admin/ThongKe/ThongKeSoLuongNhomTheoCuocThi", function (nhomData) {
+                const labels = sinhVienData.map(item => item.tenCuocThi);
+                const sinhVienValues = sinhVienData.map(item => item.soLuongSinhVien);
+                const nhomValues = nhomData.map(item => item.soLuongNhom);
+
+                new Chart($("#sinhVienNhomChart"), {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Số Lượng Sinh Viên',
+                                data: sinhVienValues,
+                                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Số Lượng Nhóm',
+                                data: nhomValues,
+                                backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { display: true },
+                            title: { display: true, text: 'Sinh Viên và Nhóm Theo Cuộc Thi' }
+                        }
+                    }
+                });
+            });
+        });
+
+        $.get("/Admin/ThongKe/ThongKeSinhVienVaGiangVienTheoKhoa", function (data) {
+            const labels = data.map(item => item.tenKhoa);
+            const sinhVienValues = data.map(item => item.soLuongSinhVien);
+            const giangVienValues = data.map(item => item.soLuongGiangVien);
+
+            new Chart($("#sinhVienGvKhoaChart"), {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Số Lượng Sinh Viên',
+                            data: sinhVienValues,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        },
+                        {
+                            label: 'Số Lượng Giảng Viên',
+                            data: giangVienValues,
+                            backgroundColor: 'rgba(255, 159, 64, 0.6)',
+                            borderColor: 'rgba(255, 159, 64, 1)',
+                            borderWidth: 1
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        title: { display: true, text: 'Sinh Viên và Giảng Viên Theo Khoa' }
+                    }
+                }
+            });
+        });
+
+        // Khoa và lĩnh vực
+        $.get("/Admin/ThongKe/GetTongSoLuongKhoaVaLinhVuc", function (data) {
+            const values = [data.soLuongKhoa, data.soLuongLinhVuc];
+            const labels = ['Số Lượng Khoa', 'Số Lượng Lĩnh Vực'];
+
+            new Chart($("#khoaLinhVucChart"), {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Thống Kê Khoa và Lĩnh Vực',
+                        data: values,
+                        backgroundColor: ['rgba(54, 162, 235, 0.6)', 'rgba(255, 206, 86, 0.6)'],
+                        borderColor: ['rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: true },
+                        title: { display: true, text: 'Thống Kê Khoa và Lĩnh Vực' }
+                    }
+                }
+            });
+        });
+    }
+
+    function loadDeTaiBiLoaiTable() {
+        $.get("/Admin/ThongKe/ThongKeDeTaiBiLoai", function (data) {
+            const tbody = $("#deTaiBiLoaiTable");
+            tbody.empty();
+            data.forEach((item, index) => {
+                tbody.append(`
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td>${item.tenVongThi}</td>
+                            <td>${item.soLuongDeTaiBiLoai}</td>
+                        </tr>
+                    `);
+            });
+        });
+    }
+
+</script>

@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "Trang quản trị Admin";
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        /* Tiêu đề chính */
+h2.text-center {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #343a40; /* Màu tối cho chữ nổi bật trên nền trắng */
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng nhẹ */
+}
+
+/* Mô tả phụ */
+p.text-center {
+    font-size: 1.2rem;
+    margin-bottom: 30px;
+    color: #6c757d; /* Màu xám nhạt thân thiện */
+}
+
+/* Đồng hồ */
+.clock {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #007bff; /* Màu xanh dương chủ đạo */
+    text-shadow: 0 0 5px rgba(0, 123, 255, 0.3); /* Phát sáng nhẹ */
+    animation: glow 1.5s infinite alternate;
+}
+
+/* Thẻ thống kê */
+.stats-card {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef); /* Màu xám nhạt gradient */
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng mềm mại */
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stats-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Tăng bóng khi hover */
+}
+
+/* Tiêu đề trong thẻ */
+.stats-card h5 {
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+    color: #495057; /* Màu trung tính */
+}
+
+/* Dữ liệu trong thẻ */
+.stats-card p {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #17a2b8; /* Màu xanh biển nhạt */
+}
+
+/* Cách bố trí */
+.row {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container my-4">
+        <h1 class="text-center">Chào mừng Admin</h1>
+        <h5 class="text-center">Đây là trang quản trị hệ thống.</h5>
+
+        <!-- Real-time Clock -->
+        <div class="clock" id="realTimeClock">00:00:00</div>
+
+        <!-- Statistics Cards -->
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <h5>Số lượng người truy cập</h5>
+                    <p id="totalVisitors">1,254</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <h5>Người đang online</h5>
+                    <p id="onlineUsers">12</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stats-card text-center">
+                    <h5>Phiên truy cập hôm nay</h5>
+                    <p id="todaySessions">145</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script>
+        // Real-time Clock
+        function updateClock() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const seconds = now.getSeconds().toString().padStart(2, '0');
+            document.getElementById('realTimeClock').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000); // Update clock every second
+        updateClock();
+
+        // Simulate real-time statistics (you can replace with AJAX calls to backend)
+        function updateStatistics() {
+            // Simulate random values for demo purposes
+            const totalVisitors = Math.floor(Math.random() * 2000) + 1000;
+            const onlineUsers = Math.floor(Math.random() * 50) + 5;
+            const todaySessions = Math.floor(Math.random() * 200) + 50;
+
+            document.getElementById('totalVisitors').textContent = totalVisitors;
+            document.getElementById('onlineUsers').textContent = onlineUsers;
+            document.getElementById('todaySessions').textContent = todaySessions;
+        }
+
+        // Update statistics every 5 seconds
+        setInterval(updateStatistics, 5000);
+        updateStatistics();
+    </script>
+</body>
+</html>

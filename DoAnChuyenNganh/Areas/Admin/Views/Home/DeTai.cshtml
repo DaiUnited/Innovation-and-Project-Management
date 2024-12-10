@@ -1,0 +1,267 @@
+﻿@{
+    ViewData["Title"] = "Quản lý Đề Tài";
+}
+
+<h2 class="text-center text-primary mb-4"><i class="fas fa-project-diagram"></i> Quản lý Đề Tài</h2>
+<div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-success" onclick="showAddModal()"><i class="fas fa-plus-circle"></i> Thêm Đề Tài</button>
+    <div class="input-group w-50">
+        <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm..." />
+        <button class="btn btn-primary" onclick="TimKiem()"><i class="fas fa-search"></i></button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped text-center align-middle" id="deTaiTable">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Tên Đề Tài</th>
+                <th>Lĩnh Vực</th>
+                <th>Cuộc Thi</th>
+                <th>Nhóm</th>
+                <th>Giảng Viên Hướng Dẫn</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="deTaiList"></tbody>
+    </table>
+</div>
+
+<!-- Modal Form -->
+<div id="deTaiModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-edit"></i> Thêm/Sửa Đề Tài</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="deTaiForm">
+                    <input type="hidden" id="deTaiId" />
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="tenDeTai" class="form-label">Tên Đề Tài</label>
+                            <input type="text" id="tenDeTai" class="form-control" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="moTa" class="form-label">Mô Tả</label>
+                            <textarea id="moTa" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="maLinhVuc" class="form-label">Lĩnh Vực</label>
+                            <select id="maLinhVuc" class="form-select"></select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="maCuocThi" class="form-label">Cuộc Thi</label>
+                            <select id="maCuocThi" class="form-select"></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="maNhom" class="form-label">Nhóm</label>
+                            <select id="maNhom" class="form-select"></select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="maGVHD" class="form-label">Giảng Viên Hướng Dẫn</label>
+                            <select id="maGVHD" class="form-select"></select>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times-circle"></i> Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script>
+    $(document).ready(function () {
+        loadDeTais();
+        loadDropdowns();
+
+        $("#deTaiForm").on("submit", function (event) {
+            event.preventDefault();
+            saveDeTai();
+        });
+    });
+
+    function loadDeTais() {
+        $.get("/Admin/DeTai/GetAll", function (data) {
+            const tbody = $("#deTaiList");
+            tbody.empty();
+            data.forEach((dt, index) => {
+                const rowClass = index % 2 === 0 ? "table-primary" : "table-light";
+                tbody.append(`
+                        <tr class="${rowClass}">
+                            <td><i class="fas fa-file-alt text-secondary"></i> ${dt.maDeTai}</td>
+                            <td><i class="fas fa-lightbulb text-warning"></i> ${dt.tenDeTai}</td>
+                            <td><i class="fas fa-chart-area text-info"></i> ${dt.linhVuc}</td>
+                            <td><i class="fas fa-trophy text-success"></i> ${dt.cuocThi}</td>
+                            <td><i class="fas fa-users text-primary"></i> ${dt.nhom}</td>
+                            <td><i class="fas fa-chalkboard-teacher text-dark"></i> ${dt.gvhd}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick="editDeTai(${dt.maDeTai})"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteDeTai(${dt.maDeTai})"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </td>
+                        </tr>
+                    `);
+            });
+        });
+    }
+
+    function TimKiem() {
+    const searchValue = $("#searchInput").val().toLowerCase();
+
+    $.get("/Admin/DeTai/GetAll", function (data) {
+        const tbody = $("#deTaiList");
+        tbody.empty();
+
+        // Lọc danh sách đề tài theo từ khóa (tên đề tài, lĩnh vực, cuộc thi, nhóm, hoặc giảng viên hướng dẫn)
+        const filteredData = data.filter(dt =>
+            dt.tenDeTai.toLowerCase().includes(searchValue) ||
+            dt.linhVuc.toLowerCase().includes(searchValue) ||
+            dt.cuocThi.toLowerCase().includes(searchValue) ||
+            dt.nhom.toLowerCase().includes(searchValue) ||
+            dt.gvhd.toLowerCase().includes(searchValue)
+        );
+
+        if (filteredData.length === 0) {
+            tbody.append('<tr><td colspan="7" class="text-center text-danger">Không tìm thấy đề tài nào!</td></tr>');
+            return;
+        }
+
+        // Hiển thị dữ liệu đã lọc
+        filteredData.forEach((dt, index) => {
+            const rowClass = index % 2 === 0 ? "table-primary" : "table-light";
+            tbody.append(`
+                <tr class="${rowClass}">
+                    <td><i class="fas fa-file-alt text-secondary"></i> ${dt.maDeTai}</td>
+                    <td><i class="fas fa-lightbulb text-warning"></i> ${dt.tenDeTai}</td>
+                    <td><i class="fas fa-chart-area text-info"></i> ${dt.linhVuc}</td>
+                    <td><i class="fas fa-trophy text-success"></i> ${dt.cuocThi}</td>
+                    <td><i class="fas fa-users text-primary"></i> ${dt.nhom}</td>
+                    <td><i class="fas fa-chalkboard-teacher text-dark"></i> ${dt.gvhd}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editDeTai(${dt.maDeTai})"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteDeTai(${dt.maDeTai})"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </td>
+                </tr>
+            `);
+        });
+        if (filteredData.length === 0) {
+            tbody.append('<tr><td colspan="4" class="text-center text-danger">Không tìm thấy kết quả phù hợp!</td></tr>');
+        }
+    });
+}
+
+
+
+    function loadDropdowns() {
+        $.get("/Admin/LinhVuc/GetAll", function (data) {
+            const dropdown = $("#maLinhVuc");
+            dropdown.empty();
+            dropdown.append('<option value="">Chọn Lĩnh Vực</option>');
+            data.forEach(lv => dropdown.append(`<option value="${lv.maLinhVuc}">${lv.tenLinhVuc}</option>`));
+        });
+
+        $.get("/Admin/CuocThi/GetAll", function (data) {
+            const dropdown = $("#maCuocThi");
+            dropdown.empty();
+            dropdown.append('<option value="">Chọn Cuộc Thi</option>');
+            data.forEach(ct => dropdown.append(`<option value="${ct.maCuocThi}">${ct.tenCuocThi}</option>`));
+        });
+
+        $.get("/Admin/Nhom/GetAll", function (data) {
+            const dropdown = $("#maNhom");
+            dropdown.empty();
+            dropdown.append('<option value="">Chọn Nhóm</option>');
+            data.forEach(nh => dropdown.append(`<option value="${nh.maNhom}">${nh.tenNhom}</option>`));
+        });
+
+        $.get("/Admin/GiangVienHuongDan/GetAll", function (data) {
+            const dropdown = $("#maGVHD");
+            dropdown.empty();
+            dropdown.append('<option value="">Chọn Giảng Viên</option>');
+            data.forEach(gv => dropdown.append(`<option value="${gv.maGVHD}">${gv.hoTen}</option>`));
+        });
+    }
+
+    function saveDeTai() {
+        const formData = {
+            MaDeTai: $("#deTaiId").val(),
+            TenDeTai: $("#tenDeTai").val(),
+            MoTa: $("#moTa").val(),
+            MaLinhVuc: $("#maLinhVuc").val(),
+            MaCuocThi: $("#maCuocThi").val(),
+            MaNhom: $("#maNhom").val(),
+            MaGVHD: $("#maGVHD").val()
+        };
+
+        const url = formData.MaDeTai ? `/Admin/DeTai/Update/${formData.MaDeTai}` : "/Admin/DeTai/Create";
+        const type = formData.MaDeTai ? "PUT" : "POST";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: formData,
+            success: function () {
+                alert("Lưu thành công!");
+                loadDeTais();
+                hideModal();
+            },
+            error: function (xhr) {
+                alert(xhr.responseText || "Đã xảy ra lỗi!");
+            }
+        });
+    }
+
+    function deleteDeTai(id) {
+        if (confirm("Bạn có chắc muốn xóa đề tài này?")) {
+            $.ajax({
+                url: `/Admin/DeTai/Delete/${id}`,
+                type: "DELETE",
+                success: function () {
+                    alert("Xóa thành công!");
+                    loadDeTais();
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText || "Đã xảy ra lỗi!");
+                }
+            });
+        }
+    }
+
+
+    function showAddModal() {
+        $("#deTaiForm")[0].reset();
+        $("#deTaiId").val('');
+        $("#deTaiModal").modal("show");
+    }
+
+    function hideModal() {
+        $("#deTaiModal").modal("hide");
+    }
+
+    function editDeTai(id) {
+        $.get(`/Admin/DeTai/GetById?id=${id}`, function (data) {
+            $("#deTaiId").val(data.maDeTai);
+            $("#tenDeTai").val(data.tenDeTai);
+            $("#moTa").val(data.moTa);
+            $("#maLinhVuc").val(data.maLinhVuc);
+            $("#maCuocThi").val(data.maCuocThi);
+            $("#maNhom").val(data.maNhom);
+            $("#maGVHD").val(data.maGVHD);
+            $("#deTaiModal").modal("show");
+        });
+    }
+</script>

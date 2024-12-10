@@ -1,0 +1,126 @@
+﻿@model DoAnChuyenNganh.Models.GiangVienHuongDan
+
+<h2 class="text-center text-gradient mb-4"><i class="bi bi-person-circle"></i> Thông Tin Cá Nhân</h2>
+
+@if (TempData["Success"] != null && ViewContext.RouteData.Values["action"].ToString() == "ThongTinCaNhan")
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Error"] != null && ViewContext.RouteData.Values["action"].ToString() == "ThongTinCaNhan")
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-lg border-0 gradient-border">
+    <div class="card-body">
+        <form method="post" class="needs-validation" novalidate>
+            <!-- Hidden fields để gửi đầy đủ dữ liệu -->
+            <input type="hidden" name="MaGVHD" value="@Model.MaGVHD" />
+            <input type="hidden" name="MaKhoa" value="@Model.MaKhoa" />
+            <input type="hidden" name="MaNguoiDung" value="@Model.MaNguoiDung" />
+            <input type="hidden" name="HoTen" value="@Model.HoTen" />
+
+            <!-- Email -->
+            <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-envelope-fill"></i> Email</label>
+                <input type="email" class="form-control gradient-input shadow-sm" name="Email" value="@Model.Email" required />
+                @Html.ValidationMessageFor(model => model.Email, null, new { @class = "text-danger mt-2" })
+            </div>
+
+            <!-- Số điện thoại -->
+            <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-telephone-fill"></i> Số Điện Thoại</label>
+                <input type="text" class="form-control gradient-input shadow-sm" name="SoDienThoai" value="@Model.SoDienThoai" />
+                @Html.ValidationMessageFor(model => model.SoDienThoai, null, new { @class = "text-danger mt-2" })
+            </div>
+
+            <!-- Thông tin tĩnh -->
+            @if (Model.Khoa != null)
+            {
+                <div class="mb-4">
+                    <label class="form-label fw-bold"><i class="bi bi-person-fill"></i> Họ Tên</label>
+                    <input type="text" class="form-control gradient-input shadow-sm" value="@Model.HoTen" readonly />
+                </div>
+                <div class="mb-4">
+                    <label class="form-label fw-bold"><i class="bi bi-building"></i> Khoa</label>
+                    <input type="text" class="form-control gradient-input shadow-sm" value="@Model.Khoa.TenKhoa" readonly />
+                </div>
+            }
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-gradient btn-lg px-5">
+                    <i class="bi bi-save"></i> Cập Nhật
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Style bổ sung -->
+<style>
+
+    .text-gradient {
+        background: linear-gradient(to right, #6a1b9a, #81c784);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .card {
+        max-width: 700px;
+        margin: 30px auto;
+        border-radius: 15px;
+        background: #ffffff;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .gradient-border {
+        border: 2px solid;
+        border-image: linear-gradient(to right, #6a1b9a, #81c784) 1;
+    }
+
+    .form-control {
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #81c784;
+            box-shadow: 0 0 8px rgba(129, 199, 132, 0.2);
+        }
+
+    .gradient-input {
+        background: linear-gradient(to right, #ffffff, #f3e5f5);
+    }
+
+    .btn-gradient {
+        background: linear-gradient(to right, #6a1b9a, #81c784);
+        color: #ffffff;
+        border: none;
+        box-shadow: 0 4px 15px rgba(106, 27, 154, 0.3);
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(to right, #81c784, #6a1b9a);
+            box-shadow: 0 8px 20px rgba(106, 27, 154, 0.5);
+        }
+
+    .alert {
+        font-size: 1rem;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .alert-dismissible .btn-close {
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+    }
+</style>

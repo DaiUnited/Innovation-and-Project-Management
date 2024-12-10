@@ -1,0 +1,311 @@
+﻿@{
+    ViewData["Title"] = "Quản lý Phân Công Chấm Điểm";
+}
+
+<h2 class="text-center text-primary mb-4"><i class="fas fa-chart-line"></i> Quản lý Phân Công Chấm Điểm</h2>
+<div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-success" onclick="showAddModal()"><i class="fas fa-plus-circle"></i> Thêm Kết Quả</button>
+    <div class="input-group w-50">
+        <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm..." />
+        <button class="btn btn-primary" onclick="TimKiem()"><i class="fas fa-search"></i></button>
+    </div>
+</div>
+<h5 style="color: red">Chọn Giám Khảo - Vòng Thi - Đề Tài. Các trường điểm và nhận xét để trống, giám khảo sẽ thực hiện chấm điểm và nhận xét dựa trên file đề tài nhóm nộp.</h5>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped text-center align-middle" id="ketQuaTable">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Giám Khảo</th>
+                <th>Vòng Thi</th>
+                <th>Đề Tài</th>
+                <th>Điểm Sáng Tạo</th>
+                <th>Điểm Khả Thi</th>
+                <th>Điểm Tác Động Xã Hội</th>
+                <th>Điểm Tiềm Năng Thị Trường</th>
+                <th>Tổng Điểm</th>
+                <th>Tình Trạng</th>
+                <th>Nhận Xét</th>
+                <th>Ngày Nhận Xét</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="ketQuaList"></tbody>
+    </table>
+</div>
+
+<!-- Modal Form -->
+<div id="ketQuaModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-edit"></i> Thêm/Sửa Kết Quả</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="ketQuaForm">
+                    <input type="hidden" id="ketQuaId" />
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="maGiamKhao" class="form-label">Giám Khảo</label>
+                            <select id="maGiamKhao" class="form-select"></select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="maVongThi" class="form-label">Vòng Thi</label>
+                            <select id="maVongThi" class="form-select"></select>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="maDeTai" class="form-label">Đề Tài</label>
+                            <select id="maDeTai" class="form-select"></select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label for="diemSangTao" class="form-label">Điểm Sáng Tạo</label>
+                            <input type="number" id="diemSangTao" class="form-control" min="0" max="10" step="0.1" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="diemKhaThi" class="form-label">Điểm Khả Thi</label>
+                            <input type="number" id="diemKhaThi" class="form-control" min="0" max="10" step="0.1" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="diemTacDongXaHoi" class="form-label">Điểm Tác Động Xã Hội</label>
+                            <input type="number" id="diemTacDongXaHoi" class="form-control" min="0" max="10" step="0.1" />
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label for="diemTiemNangThiTruong" class="form-label">Điểm Tiềm Năng</label>
+                            <input type="number" id="diemTiemNangThiTruong" class="form-control" min="0" max="10" step="0.1" />
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tinhTrang" class="form-label">Tình Trạng</label>
+                        <input type="text" id="tinhTrang" class="form-control" />
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="nhanXet" class="form-label">Nhận Xét</label>
+                            <input type="text" id="nhanXet" class="form-control" />
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="ngayNhanXet" class="form-label">Ngày Nhận Xét</label>
+                            <input type="date" id="ngayNhanXet" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times-circle"></i> Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script>
+    $(document).ready(function () {
+        loadKetQua();
+        loadDropdowns();
+
+        // Xử lý sự kiện submit form
+        $("#ketQuaForm").on("submit", function (event) {
+            event.preventDefault();
+            saveKetQua();
+        });
+    });
+
+    // Định dạng ngày
+    function formatDate(dateString) {
+        const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('vi-VN', options);
+    }
+
+    // Tải danh sách kết quả
+    function loadKetQua() {
+        $.get("/Admin/KetQuaVongThi/GetAll", function (data) {
+            const tbody = $("#ketQuaList");
+            tbody.empty();
+            data.forEach((kq, index) => {
+                const rowClass = index % 2 === 0 ? "table-primary" : "table-light";
+                tbody.append(`
+                    <tr class="${rowClass}">
+                        <td><i class="fas fa-id-card text-secondary"></i> ${kq.maKetQua}</td>
+                        <td><i class="fas fa-user-tie text-info"></i> ${kq.giamKhao}</td>
+                        <td><i class="fas fa-flag-checkered text-primary"></i> ${kq.vongThi}</td>
+                        <td><i class="fas fa-lightbulb text-warning"></i> ${kq.deTai}</td>
+                        <td><i class="fas fa-star text-success"></i> ${kq.diemSangTao}</td>
+                        <td><i class="fas fa-hammer text-secondary"></i> ${kq.diemKhaThi}</td>
+                        <td><i class="fas fa-hand-holding-heart text-danger"></i> ${kq.diemTacDongXaHoi}</td>
+                        <td><i class="fas fa-chart-line text-info"></i> ${kq.diemTiemNangThiTruong}</td>
+                        <td><i class="fas fa-calculator text-warning"></i> ${kq.tongDiem}</td>
+                        <td><i class="fas fa-balance-scale text-primary"></i> ${kq.tinhTrang}</td>
+                        <td><i class="fas fa-comments text-dark"></i> ${kq.nhanXet}</td>
+                        <td><i class="fas fa-calendar-alt text-success"></i> ${formatDate(kq.ngayNhanXet)}</td>
+                        <td>
+                            <button class="btn btn-warning btn-sm" onclick="editKetQua(${kq.maKetQua})"><i class="fas fa-edit"></i> Sửa</button>
+                            <button class="btn btn-danger btn-sm" onclick="deleteKetQua(${kq.maKetQua})"><i class="fas fa-trash-alt"></i> Xóa</button>
+                        </td>
+                    </tr>
+                `);
+            });
+        });
+    }
+
+    function TimKiem() {
+    const searchValue = $("#searchInput").val().toLowerCase();
+
+    $.get("/Admin/KetQuaVongThi/GetAll", function (data) {
+        const tbody = $("#ketQuaList");
+        tbody.empty();
+
+        // Lọc danh sách kết quả theo từ khóa
+        const filteredData = data.filter(kq =>
+            kq.giamKhao.toLowerCase().includes(searchValue) || // Tìm theo tên giám khảo
+            kq.vongThi.toLowerCase().includes(searchValue) ||  // Tìm theo vòng thi
+            kq.deTai.toLowerCase().includes(searchValue)       // Tìm theo tên đề tài
+        );
+
+                        if (filteredData.length === 0) {
+            tbody.append('<tr><td colspan="13" class="text-center text-danger">Không tìm thấy phân công nào!</td></tr>');
+            return;
+        }
+
+        // Hiển thị dữ liệu đã lọc
+        filteredData.forEach((kq, index) => {
+            const rowClass = index % 2 === 0 ? "table-primary" : "table-light";
+            tbody.append(`
+                <tr class="${rowClass}">
+                    <td><i class="fas fa-id-card text-secondary"></i> ${kq.maKetQua}</td>
+                    <td><i class="fas fa-user-tie text-info"></i> ${kq.giamKhao}</td>
+                    <td><i class="fas fa-flag-checkered text-primary"></i> ${kq.vongThi}</td>
+                    <td><i class="fas fa-lightbulb text-warning"></i> ${kq.deTai}</td>
+                    <td><i class="fas fa-star text-success"></i> ${kq.diemSangTao}</td>
+                    <td><i class="fas fa-hammer text-secondary"></i> ${kq.diemKhaThi}</td>
+                    <td><i class="fas fa-hand-holding-heart text-danger"></i> ${kq.diemTacDongXaHoi}</td>
+                    <td><i class="fas fa-chart-line text-info"></i> ${kq.diemTiemNangThiTruong}</td>
+                    <td><i class="fas fa-calculator text-warning"></i> ${kq.tongDiem}</td>
+                    <td><i class="fas fa-balance-scale text-primary"></i> ${kq.tinhTrang}</td>
+                    <td><i class="fas fa-comments text-dark"></i> ${kq.nhanXet}</td>
+                    <td><i class="fas fa-calendar-alt text-success"></i> ${formatDate(kq.ngayNhanXet)}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editKetQua(${kq.maKetQua})"><i class="fas fa-edit"></i> Sửa</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteKetQua(${kq.maKetQua})"><i class="fas fa-trash-alt"></i> Xóa</button>
+                    </td>
+                </tr>
+            `);
+        });
+    });
+}
+
+    // Tải các dropdown (giám khảo, vòng thi, đề tài)
+    function loadDropdowns() {
+        $.get("/Admin/GiamKhao/GetAll", function (data) {
+            const gkDropdown = $("#maGiamKhao");
+            gkDropdown.empty();
+            gkDropdown.append('<option value="">Chọn Giám Khảo</option>');
+            data.forEach(gk => gkDropdown.append(`<option value="${gk.maGiamKhao}">${gk.hoTen}</option>`));
+        });
+
+        $.get("/Admin/VongThi/GetAll", function (data) {
+            const vtDropdown = $("#maVongThi");
+            vtDropdown.empty();
+            vtDropdown.append('<option value="">Chọn Vòng Thi</option>');
+            data.forEach(vt => vtDropdown.append(`<option value="${vt.maVongThi}">${vt.tenVongThi}</option>`));
+        });
+
+        $.get("/Admin/DeTai/GetAll", function (data) {
+            const dtDropdown = $("#maDeTai");
+            dtDropdown.empty();
+            dtDropdown.append('<option value="">Chọn Đề Tài</option>');
+            data.forEach(dt => dtDropdown.append(`<option value="${dt.maDeTai}">${dt.tenDeTai}</option>`));
+        });
+    }
+
+    // Lưu kết quả (thêm mới hoặc cập nhật)
+    function saveKetQua() {
+        const formData = {
+            MaKetQua: $("#ketQuaId").val(),
+            MaGiamKhao: $("#maGiamKhao").val(),
+            MaVongThi: $("#maVongThi").val(),
+            MaDeTai: $("#maDeTai").val(),
+            DiemSangTao: $("#diemSangTao").val(),
+            DiemKhaThi: $("#diemKhaThi").val(),
+            DiemTacDongXaHoi: $("#diemTacDongXaHoi").val(),
+            DiemTiemNangThiTruong: $("#diemTiemNangThiTruong").val(),
+            TinhTrang: $("#tinhTrang").val(),
+            NhanXet: $("#nhanXet").val(),
+            NgayNhanXet: $("#ngayNhanXet").val(),
+        };
+
+        const id = $("#ketQuaId").val();
+        const url = id ? `/Admin/KetQuaVongThi/Update/${id}` : "/Admin/KetQuaVongThi/Create";
+        const type = id ? "PUT" : "POST";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: formData,
+            success: function () {
+                loadKetQua();
+                hideModal();
+                alert("Thao tác thành công!");
+            },
+            error: function (xhr) {
+                alert(xhr.responseText || "Có lỗi xảy ra khi lưu kết quả!");
+            }
+        });
+    }
+
+    // Xóa kết quả
+    function deleteKetQua(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa kết quả này?")) {
+            $.ajax({
+                url: `/Admin/KetQuaVongThi/Delete/${id}`,
+                type: "DELETE",
+                success: function () {
+                    loadKetQua();
+                    alert("Xóa thành công!");
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText || "Không thể xóa kết quả!");
+                }
+            });
+        }
+    }
+
+    // Sửa kết quả
+    function editKetQua(id) {
+        $.get(`/Admin/KetQuaVongThi/GetById?id=${id}`, function (data) {
+            $("#ketQuaId").val(data.maKetQua);
+            $("#maGiamKhao").val(data.maGiamKhao);
+            $("#maVongThi").val(data.maVongThi);
+            $("#maDeTai").val(data.maDeTai);
+            $("#diemSangTao").val(data.diemSangTao);
+            $("#diemKhaThi").val(data.diemKhaThi);
+            $("#diemTacDongXaHoi").val(data.diemTacDongXaHoi);
+            $("#diemTiemNangThiTruong").val(data.diemTiemNangThiTruong);
+            $("#tinhTrang").val(data.tinhTrang);
+            $("#nhanXet").val(data.nhanXet);
+            $("#ngayNhanXet").val(data.ngayNhanXet.split('T')[0]);
+            $("#ketQuaModal").modal("show");
+        });
+    }
+
+    // Hiển thị modal thêm mới
+    function showAddModal() {
+        $("#ketQuaForm")[0].reset();
+        $("#ketQuaId").val('');
+        $("#ketQuaModal").modal("show");
+    }
+
+    // Ẩn modal
+    function hideModal() {
+        $("#ketQuaModal").modal("hide");
+    }
+
+</script>

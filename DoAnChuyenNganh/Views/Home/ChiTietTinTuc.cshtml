@@ -1,0 +1,163 @@
+﻿@model DoAnChuyenNganh.Models.TinTuc
+
+<div class="container my-5">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="/Home/DanhSachTinTuc">Tin tức</a></li>
+            <li class="breadcrumb-item active" aria-current="page">@Model.TieuDe</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <!-- Tiêu đề bài viết -->
+            <h1 class="text-primary fw-bold mb-3">
+                @Model.TieuDe
+            </h1>
+            <p class="text-muted">
+                <i class="far fa-calendar-alt"></i> Ngày đăng: @Model.NgayTao.ToString("dd/MM/yyyy")
+            </p>
+
+            <!-- Ảnh bìa -->
+            <div class="mb-4">
+                <img src="@Url.Content(Model.AnhBia)" alt="Ảnh bìa" class="img-fluid rounded shadow" style="width: 100%; max-height: 500px; object-fit: cover;" />
+            </div>
+
+            <!-- Nội dung chi tiết -->
+            <div class="content-wrapper">
+                <div class="content bg-light p-4 rounded shadow-sm">
+                    <div style="line-height: 1.8; text-align: justify;">
+                        @Html.Raw(Model.NoiDung)
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-3 sidebar-section">
+            <!-- Thông tin liên quan -->
+            <div class="bg-white rounded shadow-sm p-4 mb-4">
+                <h5 class="fw-bold text-primary mb-3">Thông tin liên quan</h5>
+                <p><strong>Người đăng:</strong> Admin Đại Đẹp Trai</p>
+                <p><strong>Ngày đăng:</strong> @Model.NgayTao.ToString("dd/MM/yyyy")</p>
+            </div>
+
+            <!-- Tin tức khác -->
+            <div class="bg-white rounded shadow-sm p-4">
+                <h5 class="fw-bold text-primary mb-3">Tin tức khác</h5>
+                <ul class="list-unstyled">
+                    @foreach (var tin in ViewBag.OtherTinTuc as IEnumerable<DoAnChuyenNganh.Models.TinTuc>)
+                    {
+                        <li class="mb-3">
+                            <a href="@Url.Action("ChiTietTinTuc", "Home", new { id = tin.MaTinTuc })" class="text-dark text-decoration-none">
+                                <i class="far fa-newspaper text-primary me-2"></i> @tin.TieuDe
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- CSS -->
+<style>
+    .sidebar-section {
+        margin-top: 75px; /* Điều chỉnh khoảng cách ở đây */
+    }
+    .content-wrapper {
+        margin-right: -315px;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .content {
+        max-width: 100%; /* Bảo đảm phần nội dung chiếm toàn bộ không gian */
+        width: calc(100% + 30px); /* Nếu muốn bù lại margin */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .bg-light {
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    p {
+        text-align: justify; /* Đảm bảo căn đều nội dung */
+    }
+
+
+    .breadcrumb {
+        background: transparent;
+        padding: 0;
+        margin-bottom: 1rem;
+    }
+
+    .breadcrumb-item a {
+        color: #007bff;
+        text-decoration: none;
+    }
+
+        .breadcrumb-item a:hover {
+            text-decoration: underline;
+        }
+
+    .content img {
+        margin: 20px 0;
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .content h1, .content h2, .content h3, .content h4, .content h5, .content h6 {
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
+    }
+
+    .content p {
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .content table {
+        width: 100%;
+        margin: 20px 0;
+        border-collapse: collapse;
+    }
+
+    .content table, .content th, .content td {
+        border: 1px solid #dee2e6;
+    }
+
+    .content th, .content td {
+        padding: 10px;
+        text-align: left;
+    }
+
+    .list-unstyled li a {
+        color: #333;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+
+        .list-unstyled li a:hover { 
+            color: #007bff;
+            text-decoration: underline;
+        }
+
+    .shadow-sm {
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h5.fw-bold {
+        border-bottom: 2px solid #007bff;
+        padding-bottom: 5px;
+    }
+</style>

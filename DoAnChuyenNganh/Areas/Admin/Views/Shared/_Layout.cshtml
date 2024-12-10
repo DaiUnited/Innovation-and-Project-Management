@@ -1,0 +1,167 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Admin Panel</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            height: 100%;
+        }
+
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 250px;
+            height: 100vh;
+            overflow-y: auto;
+            background: linear-gradient(135deg, #4b0f96, #1a4c99);
+            color: white;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+
+            .sidebar h4 {
+                text-align: center;
+                margin-bottom: 1.5rem;
+                font-weight: bold;
+                color: #f1f1f1;
+            }
+
+            .sidebar .nav-link {
+                font-size: 0.95rem;
+                padding: 0.8rem 1rem;
+                border-radius: 5px;
+                transition: all 0.3s ease;
+            }
+
+                .sidebar .nav-link:hover {
+                    background-color: rgba(255, 255, 255, 0.2);
+                }
+
+                .sidebar .nav-link.active {
+                    background-color: rgba(255, 255, 255, 0.4);
+                    font-weight: bold;
+                }
+
+        .main-content {
+            margin-left: 250px; /* Đẩy nội dung qua bên phải đủ với chiều rộng của sidebar */
+            padding: 2rem;
+            flex-grow: 1;
+            background-color: #ffffff;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+            border-top-left-radius: 10px;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+
+        a.nav-link {
+            color: white;
+        }
+
+            a.nav-link:hover {
+                text-decoration: none;
+                color: #f1f1f1;
+            }
+
+        .logout-link {
+            margin-top: auto;
+            font-weight: bold;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex">
+        <!-- Sidebar Menu -->
+        <div class="sidebar d-flex flex-column">
+            <h4>Admin Panel</h4>
+            <a href="/Home/Index" class="btn btn-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i>⇚ Quay lại Trang Chủ
+            </a>
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link active" asp-area="Admin" asp-controller="Home" asp-action="Index">Trang chủ Admin</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="VaiTro" asp-action="VaiTro">⚙️ Quản lý Vai Trò</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="Khoa" asp-action="Khoa">⚙️ Quản lý Khoa</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="NguoiDung" asp-action="NguoiDung">⚙️ Quản lý Người Dùng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="GiamKhao" asp-action="GiamKhao">⚙️ Quản lý Giám Khảo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="GiangVienHuongDan" asp-action="GiangVienHuongDan">⚙️ Quản lý Giảng Viên Hướng Dẫn</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="SinhVien" asp-action="SinhVien">⚙️ Quản lý Sinh Viên</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="Nhom" asp-action="Nhom">⚙️ Quản lý Nhóm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="LinhVuc" asp-action="LinhVuc">⚙️ Quản lý Lĩnh Vực</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="CuocThi" asp-action="CuocThi">⚙️ Quản lý Cuộc Thi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="VongThi" asp-action="VongThi">⚙️ Quản lý Vòng Thi</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="DeTai" asp-action="DeTai">⚙️ Quản lý Đề Tài</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="KetQuaVongThi" asp-action="PhanCongChamDiem">⚙️ Quản lý Phân Công Chấm Điểm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="KetQuaVongThi" asp-action="KetQuaVongThiSoKhao">⚙️ Quản lý Kết Quả Vòng Thi Sơ Khảo</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="KetQuaVongThi" asp-action="KetQuaVongThiBanKet">⚙️ Quản lý Kết Quả Vòng Thi Bán Kết</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="KetQuaVongThi" asp-action="KetQuaVongThiChungKet">⚙️ Quản lý Kết Quả Vòng Thi Chung Kết</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="BaiNop" asp-action="BaiNop">⚙️ Quản lý Bài Nộp</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="GiaiThuong" asp-action="GiaiThuong">⚙️ Quản lý Giải Thưởng</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="DeTaiDatGiai" asp-action="DeTaiDatGiai">⚙️ Quản lý Đề Tài Đạt Giải</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="LoaiTinTuc" asp-action="LoaiTinTuc">⚙️ Quản lý Loại Tin Tức</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="TinTuc" asp-action="TinTuc">⚙️ Quản lý Tin Tức</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" asp-area="Admin" asp-controller="ThongKe" asp-action="ThongKe">⚙️ Báo Cáo - Thống Kê</a>
+                </li>
+            </ul>
+            <a class="nav-link logout-link text-white" href="/Account/Logout">Đăng xuất</a>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+</html>

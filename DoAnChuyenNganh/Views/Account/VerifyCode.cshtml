@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Xác nhận mã";
+}
+
+<h2 class="text-center text-gradient mb-4"><i class="bi bi-shield-check"></i> Xác Nhận Mã</h2>
+
+@if (TempData["Error"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card shadow-lg border-0 gradient-border">
+    <div class="card-body">
+        <form method="post" class="needs-validation" novalidate>
+            <!-- Mã xác nhận -->
+            <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-key"></i> Mã xác nhận</label>
+                <input type="text" id="code" name="code" class="form-control gradient-input shadow-sm" placeholder="Nhập mã xác nhận" required />
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-gradient btn-lg px-5">
+                    <i class="bi bi-check-circle-fill"></i> Xác nhận
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Style bổ sung -->
+<style>
+    .text-gradient {
+        background: linear-gradient(to right, #0277bd, #ffd600);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .card {
+        max-width: 600px;
+        margin: 30px auto;
+        border-radius: 15px;
+        background: #ffffff;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .gradient-border {
+        border: 2px solid;
+        border-image: linear-gradient(to right, #0277bd, #ffd600) 1;
+    }
+
+    .form-control {
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #ffd600;
+            box-shadow: 0 0 8px rgba(255, 214, 0, 0.2);
+        }
+
+    .gradient-input {
+        background: linear-gradient(to right, #ffffff, #e3f2fd);
+    }
+
+    .btn-gradient {
+        background: linear-gradient(to right, #0277bd, #ffd600);
+        color: #ffffff;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 119, 189, 0.3);
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(to right, #ffd600, #0277bd);
+            box-shadow: 0 8px 20px rgba(0, 119, 189, 0.5);
+        }
+
+    .alert {
+        font-size: 1rem;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .alert-dismissible .btn-close {
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+    }
+</style>

@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "Quản lý Khoa";
+}
+
+<h2 class="text-center text-primary mb-4"><i class="fas fa-university"></i> Quản lý Khoa</h2>
+<div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-success" onclick="showAddModal()"><i class="fas fa-plus-circle"></i> Thêm Khoa</button>
+    <div class="input-group w-50">
+        <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm..." />
+        <button class="btn btn-primary" onclick="TimKiem()"><i class="fas fa-search"></i></button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped text-center align-middle" id="khoaTable">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Tên Khoa</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="khoaList"></tbody>
+    </table>
+</div>
+
+<!-- Modal Form -->
+<div id="khoaModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title"><i class="fas fa-edit"></i> Thêm/Sửa Khoa</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="khoaForm">
+                    <input type="hidden" id="khoaId" name="Id" />
+                    <div class="mb-3">
+                        <label for="tenKhoa" class="form-label">Tên Khoa</label>
+                        <input type="text" id="tenKhoa" name="TenKhoa" class="form-control" placeholder="Nhập tên khoa" required />
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times-circle"></i> Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script>
+    $(document).ready(function () {
+        loadKhoas();
+
+        $("#khoaForm").on("submit", function (event) {
+            event.preventDefault();
+            saveKhoa();
+        });
+    });
+
+    function loadKhoas() {
+        $.get("/Admin/Khoa/GetAll", function (data) {
+            const tbody = $("#khoaList");
+            tbody.empty();
+
+            data.forEach((khoa, index) => {
+                const rowClass = index % 2 === 0 ? "table-primary" : "table-light";
+                tbody.append(`
+                        <tr class="${rowClass}">
+                                    <td><i class="fas fa-hashtag text-secondary"></i>${khoa.maKhoa}</td>
+                            <td><i class="fas fa-university text-info"></i> ${khoa.tenKhoa}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick="editKhoa(${khoa.maKhoa})"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteKhoa(${khoa.maKhoa})"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </td>
+                        </tr>
+                    `);
+            });
+        });
+    }
+
+    function TimKiem() {
+    const searchValue = $("#searchInput").val().toLowerCase();
+
+    $.get("/Admin/Khoa/GetAll", function (data) {
+        const tbody = $("#khoaList");
+        tbody.empty();
+
+        // Lọc danh sách khoa theo từ khóa
+        const filteredData = data.filter(khoa =>
+            khoa.tenKhoa.toLowerCase().includes(searchValue) // Tìm theo tên khoa
+        );
+
+                if (filteredData.length === 0) {
+            tbody.append('<tr><td colspan="3" class="text-center text-danger">Không tìm thấy khoa nào!</td></tr>');
+            return;
+        }
+
+        // Hiển thị dữ liệu đã lọc
+        filteredData.forEach((khoa, index) => {
+            const rowClass = index % 2 === 0 ? "table-primary" : "table-light";
+            tbody.append(`
+                <tr class="${rowClass}">
+                        <td><i class="fas fa-hashtag text-secondary"></i> ${khoa.maKhoa}</td>
+                    <td><i class="fas fa-university text-info"></i> ${khoa.tenKhoa}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editKhoa(${khoa.maKhoa})"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteKhoa(${khoa.maKhoa})"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </td>
+                </tr>
+            `);
+        });
+    });
+}
+
+
+    function editKhoa(id) {
+        $.get(`/Admin/Khoa/GetById?id=${id}`, function (data) {
+            $("#khoaId").val(data.maKhoa);
+            $("#tenKhoa").val(data.tenKhoa);
+            $("#khoaModal").modal("show");
+        });
+    }
+
+    function saveKhoa() {
+        const formData = {
+            MaKhoa: $("#khoaId").val(),
+            TenKhoa: $("#tenKhoa").val()
+        };
+        const id = $("#khoaId").val();
+        const url = id ? `/Admin/Khoa/Update/${id}` : "/Admin/Khoa/Create";
+        const type = id ? "PUT" : "POST";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: formData,
+            success: function () {
+                $("#khoaModal").modal("hide");
+                loadKhoas();
+                alert("Thao tác thành công");
+            },
+            error: function (xhr) {
+                alert(xhr.responseText || "Đã xảy ra lỗi!");
+            }
+        });
+    }
+
+    function deleteKhoa(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa khoa này?")) {
+            $.ajax({
+                url: `/Admin/Khoa/Delete/${id}`,
+                type: "DELETE",
+                success: function () {
+                    loadKhoas(); // Làm mới danh sách sau khi xóa
+                    alert("Xóa khoa thành công!");
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText || "Có lỗi xảy ra khi xóa khoa!");
+                }
+            });
+        }
+    }
+
+
+    function hideModal() {
+        $("#khoaModal").modal("hide");
+    }
+
+    function showAddModal() {
+        $("#khoaForm")[0].reset();
+        $("#khoaId").val('');
+        $("#khoaModal").modal("show");
+    }
+</script>

@@ -1,0 +1,127 @@
+﻿@model DoAnChuyenNganh.Models.DeTai
+
+@{
+    ViewData["Title"] = "Nộp Bài";
+    var ngayKetThuc = Model.CuocThi.NgayKetThuc.ToString("yyyy-MM-ddTHH:mm:ss");
+}
+
+<h2 class="text-center text-gradient mb-4"><i class="bi bi-cloud-arrow-up"></i> Nộp Bài Cho Đề Tài: <span class="text-primary">@Model.TenDeTai</span></h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h4 class="text-gradient"><i class="bi bi-trophy"></i> Thông Tin Đề Tài</h4>
+        <p><strong>Cuộc Thi:</strong> @Model.CuocThi.TenCuocThi</p>
+        <p><strong>Ngày Bắt Đầu:</strong> @Model.CuocThi.NgayBatDau.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Ngày Kết Thúc:</strong> @Model.CuocThi.NgayKetThuc.ToString("dd/MM/yyyy HH:mm")</p>
+        <p><strong>Lĩnh Vực:</strong> @Model.LinhVuc.TenLinhVuc</p>
+        <p><strong>Nhóm:</strong> @Model.Nhom.TenNhom</p>
+        <p><strong>Giảng Viên Hướng Dẫn:</strong> @Model.GiangVienHuongDan.HoTen</p>
+    </div>
+</div>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body text-center">
+        <h4 class="text-gradient"><i class="bi bi-clock"></i> Thời Gian Còn Lại</h4>
+        <p id="countdown" class="text-danger fs-4"></p>
+        <h4 class="text-gradient"><i class="bi bi-calendar-event"></i> Thời Gian Hiện Tại</h4>
+        <p id="currentTime" class="text-primary fs-5"></p>
+    </div>
+</div>
+
+<form method="post" enctype="multipart/form-data">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h4 class="text-gradient"><i class="bi bi-upload"></i> Tải Lên File</h4>
+            <div class="mb-3">
+                <label for="files" class="form-label">Tải lên file:</label>
+                <input type="file" name="files" class="form-control" multiple required />
+            </div>
+            <button type="submit" class="btn btn-success"><i class="bi bi-cloud-upload"></i> Nộp Bài</button>
+        </div>
+    </div>
+</form>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">
+        <i class="bi bi-check-circle-fill"></i> @TempData["SuccessMessage"]
+    </div>
+}
+
+<script>
+    // Hiển thị thời gian hiện tại
+    function updateTime() { 
+        const currentTimeElement = document.getElementById("currentTime");
+        const now = new Date();
+        currentTimeElement.innerText = now.toLocaleString("vi-VN", {
+            timeZone: "Asia/Ho_Chi_Minh",
+            hour12: false,
+        });
+    }
+    setInterval(updateTime, 1000);
+
+    // Đếm ngược đến ngày kết thúc
+    const countdownElement = document.getElementById("countdown");
+    const deadline = new Date("@ngayKetThuc");
+
+    function updateCountdown() {
+        const now = new Date();
+        const timeRemaining = deadline - now;
+
+        if (timeRemaining <= 0) {
+            countdownElement.innerText = "Thời gian đã kết thúc!";
+            countdownElement.classList.remove("text-danger");
+            countdownElement.classList.add("text-muted");
+        } else {
+            const days = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+            countdownElement.innerText = `${days} ngày, ${hours} giờ, ${minutes} phút, ${seconds} giây`;
+        }
+    }
+    setInterval(updateCountdown, 1000);
+</script>
+
+<style>
+
+    .text-gradient {
+        background: linear-gradient(to right, #4caf50, #3f51b5);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        background: #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 20px;
+    }
+
+    .btn-success {
+        background-color: #4caf50;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
+    }
+
+        .btn-success:hover {
+            background-color: #3f51b5;
+            color: white;
+        }
+
+    .alert {
+        font-size: 1rem;
+        margin-top: 20px;
+    }
+
+    #countdown {
+        font-weight: bold;
+    }
+
+    #currentTime {
+        font-weight: bold;
+    }
+</style>

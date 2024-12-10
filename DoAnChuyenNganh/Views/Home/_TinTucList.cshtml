@@ -1,0 +1,19 @@
+﻿@model IEnumerable<DoAnChuyenNganh.Models.TinTuc>
+
+<div class="row g-4">
+    @foreach (var tinTuc in Model)
+    {
+        <div class="col-md-4 news-item" data-category="@tinTuc.LoaiTinTuc.FilterKey">
+            <div class="card border-0 shadow-lg">
+                <img src="@Url.Content(tinTuc.AnhBia)" class="card-img-top rounded" alt="Tin tức">
+                <div class="card-body">
+                    <h5 class="card-title">@tinTuc.TieuDe</h5>
+                    <p class="card-text text-muted">@tinTuc.LoaiTinTuc?.TenLoai</p>
+                    <small><i class="bi bi-calendar-event"></i> @tinTuc.NgayTao.ToString("dd/MM/yyyy")</small>
+                    <p>@tinTuc.MoTa</p>
+                    <a href="@Url.Action("ChiTietTinTuc", "Home", new { id = tinTuc.MaTinTuc })" class="btn btn-primary">Xem chi tiết</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

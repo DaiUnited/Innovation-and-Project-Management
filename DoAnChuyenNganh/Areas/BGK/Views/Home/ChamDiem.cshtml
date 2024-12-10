@@ -1,0 +1,199 @@
+﻿@model List<DoAnChuyenNganh.Models.KetQuaVongThi>
+@{
+    ViewData["Title"] = "Danh sách đề tài cần chấm điểm";
+}
+
+<h2 class="text-center text-gradient mb-4"><i class="bi bi-list-check"></i> Danh sách đề tài cần chấm điểm</h2>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle-fill"></i> Không có đề tài nào để chấm.
+    </div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered shadow-sm rounded">
+            <thead class="table-gradient">
+                <tr>
+                    <th>ID</th>
+                    <th>Đề Tài</th>
+                    <th>Vòng Thi</th>
+                    <th colspan="4">Điểm Số</th>
+                    <th>Nhận Xét</th>
+                    <th>Bài Nộp</th>
+                    <th>Actions</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Sáng Tạo</th>
+                    <th>Khả Thi</th>
+                    <th>Tác Động</th>
+                    <th>Thị Trường</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kq in Model)
+                {
+                    <tr>
+                        <td>@kq.MaKetQua</td>
+                        <td><strong>@kq.DeTai.TenDeTai</strong></td>
+                        <td>@kq.VongThi.TenVongThi</td>
+                        <td>@kq.DiemSangTao</td>
+                        <td>@kq.DiemKhaThi</td>
+                        <td>@kq.DiemTacDongXaHoi</td>
+                        <td>@kq.DiemTiemNangThiTruong</td>
+                        <td>@kq.NhanXet</td>
+                        <td class="text-center">
+                            @if (kq.DeTai.BaiNop != null)
+                            {
+                                <a href="/BGK/ChamDiem/DownloadFile?maDeTai=@kq.DeTai.MaDeTai" class="btn btn-outline-primary btn-sm">
+                                    <i class="bi bi-download"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning text-dark">Chưa nộp</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#editModal-@kq.MaKetQua">
+                                <i class="bi bi-pencil-fill"></i> Chấm
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Modal chỉnh sửa điểm -->
+                    <div class="modal fade" id="editModal-@kq.MaKetQua" tabindex="-1" aria-labelledby="editModalLabel-@kq.MaKetQua" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editModalLabel-@kq.MaKetQua">Chỉnh Sửa Điểm - @kq.DeTai.TenDeTai</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form method="post" asp-action="LuuDiem" asp-controller="ChamDiem" asp-area="BGK">
+                                    <div class="modal-body">
+                                        <input type="hidden" name="maKetQua" value="@kq.MaKetQua" />
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Điểm Sáng Tạo</label>
+                                            <input type="number" name="diemSangTao" class="form-control" min="0" max="10" step="0.1" value="@kq.DiemSangTao" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Điểm Khả Thi</label>
+                                            <input type="number" name="diemKhaThi" class="form-control" min="0" max="10" step="0.1" value="@kq.DiemKhaThi" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Điểm Tác Động Xã Hội</label>
+                                            <input type="number" name="diemTacDongXaHoi" class="form-control" min="0" max="10" step="0.1" value="@kq.DiemTacDongXaHoi" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Điểm Tiềm Năng Thị Trường</label>
+                                            <input type="number" name="diemTiemNangThiTruong" class="form-control" min="0" max="10" step="0.1" value="@kq.DiemTiemNangThiTruong" />
+                                        </div>
+                                        <div class="mb-3">
+                                            <label class="fw-bold">Nhận Xét</label>
+                                            <textarea name="nhanXet" class="form-control">@kq.NhanXet</textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                        <button type="submit" class="btn btn-success">Lưu</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+<!-- Style bổ sung -->
+<style>
+
+    .text-gradient {
+        background: linear-gradient(to right, #673ab7, #4caf50);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .table-gradient {
+        background: linear-gradient(to right, #673ab7, #4caf50);
+        color: white;
+    }
+
+    .table {
+        background-color: #ffffff;
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+    }
+
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    .btn-outline-primary {
+        transition: all 0.3s ease;
+    }
+
+        .btn-outline-primary:hover {
+            background-color: #673ab7;
+            color: white;
+        }
+
+    .badge.bg-warning {
+        font-size: 0.9rem;
+        padding: 5px 10px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+    }
+
+    .btn-sm {
+        font-size: 0.875rem;
+        padding: 5px 10px;
+    }
+
+    .table {
+        font-size: 0.85rem;
+        border-collapse: collapse;
+        margin-bottom: 1rem;
+    }
+
+        .table th,
+        .table td {
+            padding: 0.5rem;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+    .table-gradient {
+        background: linear-gradient(to right, #4caf50, #673ab7);
+        color: white;
+    }
+
+    .btn-sm {
+        font-size: 0.85rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .modal-header {
+        background-color: #673ab7;
+        color: white;
+    }
+
+    .modal-footer .btn-success {
+        background-color: #4caf50;
+        border: none;
+    }
+</style>

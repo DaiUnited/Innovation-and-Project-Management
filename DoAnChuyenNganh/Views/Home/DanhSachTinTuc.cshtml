@@ -1,0 +1,98 @@
+﻿@model IEnumerable<DoAnChuyenNganh.Models.TinTuc>
+@{
+    ViewData["Title"] = "Tin tức";
+}
+
+<div class="container my-5">
+    <h1 class="text-primary fw-bold mb-4">Tin tức</h1>
+
+    <!-- Bộ lọc -->
+    <div class="mb-4">
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <button class="nav-link active filter-btn" data-filter="all">Tất cả</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link filter-btn" data-filter="de-tai">Đề tài</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link filter-btn" data-filter="linh-vuc">Lĩnh vực</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link filter-btn" data-filter="cuoc-thi">Cuộc thi</button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Danh sách tin tức -->
+    <div class="row" id="news-list">
+        @foreach (var tinTuc in Model)
+        {
+            <div class="col-12 mb-4 news-item" data-category="@tinTuc.LoaiTinTuc.FilterKey">
+                <div class="card border-0 shadow-sm">
+                    <div class="row g-0">
+                        <!-- Hình ảnh -->
+                        <div class="col-md-4">
+                            <img src="@Url.Content(tinTuc.AnhBia)" class="img-fluid rounded-start" alt="Tin tức">
+                        </div>
+                        <!-- Nội dung -->
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary fw-bold">@tinTuc.TieuDe</h5>
+                                <p class="card-text text-muted">
+                                    <small><i class="bi bi-calendar-event"></i> @tinTuc.NgayTao.ToString("dd/MM/yyyy")</small>
+                                </p>
+                                <p class="card-text">@tinTuc.MoTa</p>
+                                <a href="@Url.Action("ChiTietTinTuc", "Home", new { id = tinTuc.MaTinTuc })" class="btn btn-outline-primary">Xem tiếp</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+<!-- CSS -->
+<style>
+    .news-item {
+        display: block;
+    }
+
+    .filter-btn {
+        cursor: pointer;
+    }
+
+        .filter-btn.active {
+            background-color: #0d6efd;
+            color: white !important;
+        }
+</style>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const filterButtons = document.querySelectorAll(".filter-btn");
+        const newsItems = document.querySelectorAll(".news-item");
+
+        filterButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const filter = button.getAttribute("data-filter");
+
+                // Bỏ trạng thái active khỏi tất cả các nút
+                filterButtons.forEach(btn => btn.classList.remove("active"));
+                button.classList.add("active");
+
+                // Lọc danh sách tin tức
+                newsItems.forEach(item => {
+                    const category = item.getAttribute("data-category");
+                    if (filter === "all" || category === filter) {
+                        item.style.display = "block";
+                    } else {
+                        item.style.display = "none";
+                    }
+                });
+            });
+        });
+    });
+</script>

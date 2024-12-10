@@ -1,0 +1,178 @@
+﻿@model IEnumerable<dynamic>
+
+@{
+    ViewData["Title"] = "Thông Tin Đề Tài";
+}
+
+<h2 class="text-center text-gradient mb-4"><i class="bi bi-info-circle"></i> Thông Tin Đề Tài</h2>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-warning text-center">
+        <i class="bi bi-exclamation-triangle-fill"></i> @ViewBag.ErrorMessage
+    </div>
+}
+else if (!Model.Any())
+{
+    <div class="alert alert-info text-center">
+        <i class="bi bi-info-circle-fill"></i> Không có đề tài nào để hiển thị.
+    </div>
+}
+else
+{
+@foreach (var dt in Model)
+{
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h3 class="text-gradient"><i class="bi bi-journal-text"></i> Đề Tài: @dt.TenDeTai</h3>
+            <p><strong><i class="bi bi-collection"></i> Lĩnh Vực:</strong> @dt.LinhVuc</p>
+            <p><strong><i class="bi bi-trophy"></i> Cuộc Thi:</strong> @dt.CuocThi</p>
+            <p><strong><i class="bi bi-person-bounding-box"></i> Giảng Viên Hướng Dẫn:</strong> @dt.GVHD</p>
+        </div>
+    </div>
+
+    <h4 class="text-gradient"><i class="bi bi-bar-chart-line"></i> Kết Quả Qua Các Vòng Thi</h4>
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered shadow-sm">
+            <thead class="table-gradient">
+                <tr>
+                    <th>Vòng Thi</th>
+                    <th>Điểm Sáng Tạo</th>
+                    <th>Điểm Khả Thi</th>
+                    <th>Điểm Tác Động Xã Hội</th>
+                    <th>Điểm Tiềm Năng Thị Trường</th>
+                    <th>Tổng Điểm</th>
+                    <th>Xếp Hạng</th>
+                    <th>Nhận Xét</th>
+                    <th>Ngày Nhận Xét</th>
+                    <th>Tình Trạng</th>
+                    <th>Nộp Bài</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var kq in dt.KetQuas)
+                {
+                    <tr>
+                        <td>@kq.TenVongThi</td>
+                        <td>@kq.DiemSangTao</td>
+                        <td>@kq.DiemKhaThi</td>
+                        <td>@kq.DiemTacDongXaHoi</td>
+                        <td>@kq.DiemTiemNangThiTruong</td>
+                        <td>@kq.TongDiem</td>
+                        <td>@kq.XepHang</td>
+                        <td>@kq.NhanXet</td>
+                        <td>@(kq.NgayNhanXet?.ToString("dd/MM/yyyy") ?? "Chưa có")</td>
+                        <td>
+                            @if (kq.TinhTrang == "Đề tài của nhóm đã bị loại")
+                            {
+                                <span class="text-danger"><i class="bi bi-x-circle-fill"></i> @kq.TinhTrang</span>
+                            }
+                            else
+                            {
+                                <span class="text-success"><i class="bi bi-check-circle-fill"></i> @(kq.TinhTrang ?? "Chưa cập nhật")</span>
+                            }
+                        </td>
+                        <td>
+                            @if (ViewBag.IsTruongNhom)
+                            {
+                                @if (kq.TinhTrang == "Đề tài của nhóm đã bị loại")
+                                {
+                                    <span class="text-danger">Đề tài đã bị loại</span>
+                                }
+                                else
+                                {
+                                    <a href="/SV/NopDeTai/NopBai?maDeTai=@dt.MaDeTai" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-upload"></i> Nộp Bài
+                                    </a>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">Chỉ nhóm trưởng mới có thể nộp bài</span>
+                            }
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h4 class="text-gradient"><i class="bi bi-file-earmark"></i> File Bài Nộp</h4>
+    <div>
+        @if (dt.BaiNop?.FileDinhKem != null)
+        {
+            <a href="/SV/NopDeTai/DownloadFile?maDeTai=@dt.MaDeTai" class="btn btn-info">
+                <i class="bi bi-download"></i> Tải về
+            </a>
+        }
+        else
+        {
+            <span class="text-danger"><i class="bi bi-exclamation-circle"></i> Chưa nộp</span>
+        }
+    </div>
+    <hr />
+}
+}
+
+    <style>
+
+    .text-gradient {
+        background: linear-gradient(to right, #ff9800, #4caf50);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .table-gradient {
+        background: linear-gradient(to right, #4caf50, #ff9800);
+        color: white;
+    }
+
+    .card {
+        border: none;
+        border-radius: 10px;
+        background: #ffffff;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .table {
+        font-size: 0.9rem;
+        background-color: #ffffff;
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+    }
+
+    .table th, .table td {
+        text-align: center;
+        vertical-align: middle;
+        padding: 0.5rem;
+    }
+
+    .table th {
+        font-weight: bold;
+    }
+
+    .table .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.25rem 0.5rem;
+    }
+
+    .btn-outline-primary {
+        border-color: #4caf50;
+        color: #4caf50;
+    }
+
+    .btn-outline-primary:hover {
+        background: #4caf50;
+        color: white;
+    }
+
+    .text-danger, .text-success {
+        font-weight: bold;
+    }
+
+    .text-muted {
+        font-size: 0.8rem;
+        font-style: italic;
+    }
+</style>

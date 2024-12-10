@@ -1,0 +1,116 @@
+﻿@model DoAnChuyenNganh.Models.GiamKhao
+
+<h2 class="text-center text-gradient mb-4"><i class="bi bi-key-fill"></i> Đổi Mật Khẩu</h2>
+
+@if (TempData["Success"] != null && ViewContext.RouteData.Values["action"].ToString() == "DoiMatKhau")
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <i class="bi bi-check-circle-fill"></i> @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+@if (TempData["Error"] != null && ViewContext.RouteData.Values["action"].ToString() == "DoiMatKhau")
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i> @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<!-- Hiển thị lỗi tổng quát -->
+@Html.ValidationSummary(true, "", new { @class = "text-danger text-center mb-4" })
+
+<div class="card shadow-lg border-0 gradient-border">
+    <div class="card-body">
+        <form method="post" class="needs-validation" novalidate>
+            <!-- Mật khẩu hiện tại -->
+            <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-shield-lock-fill"></i> Mật khẩu hiện tại</label>
+                <input type="password" class="form-control gradient-input shadow-sm" name="matKhauCu" required />
+            </div>
+
+            <!-- Mật khẩu mới -->
+            <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-key-fill"></i> Mật khẩu mới</label>
+                <input type="password" class="form-control gradient-input shadow-sm" name="matKhauMoi" required />
+                @Html.ValidationMessage("matKhauMoi", null, new { @class = "text-danger mt-2" })
+            </div>
+
+            <!-- Xác nhận mật khẩu mới -->
+            <div class="mb-4">
+                <label class="form-label fw-bold"><i class="bi bi-check-circle-fill"></i> Xác nhận mật khẩu mới</label>
+                <input type="password" class="form-control gradient-input shadow-sm" name="xacNhanMatKhauMoi" required />
+                @Html.ValidationMessage("xacNhanMatKhauMoi", null, new { @class = "text-danger mt-2" })
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn btn-gradient btn-lg px-5">
+                    <i class="bi bi-arrow-repeat"></i> Đổi Mật Khẩu
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Style bổ sung -->
+<style>
+
+    .text-gradient {
+        background: linear-gradient(to right, #0277bd, #ffd600);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .card {
+        max-width: 600px;
+        margin: 30px auto;
+        border-radius: 15px;
+        background: #ffffff;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .gradient-border {
+        border: 2px solid;
+        border-image: linear-gradient(to right, #0277bd, #ffd600) 1;
+    }
+
+    .form-control {
+        border: 1px solid #dee2e6;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: #ffd600;
+            box-shadow: 0 0 8px rgba(255, 214, 0, 0.2);
+        }
+
+    .gradient-input {
+        background: linear-gradient(to right, #ffffff, #e3f2fd);
+    }
+
+    .btn-gradient {
+        background: linear-gradient(to right, #0277bd, #ffd600);
+        color: #ffffff;
+        border: none;
+        box-shadow: 0 4px 15px rgba(0, 119, 189, 0.3);
+        transition: all 0.3s ease;
+    }
+
+        .btn-gradient:hover {
+            background: linear-gradient(to right, #ffd600, #0277bd);
+            box-shadow: 0 8px 20px rgba(0, 119, 189, 0.5);
+        }
+
+    .alert {
+        font-size: 1rem;
+        border-radius: 5px;
+        margin-bottom: 20px;
+    }
+
+    .alert-dismissible .btn-close {
+        position: absolute;
+        top: 0.5rem;
+        right: 1rem;
+    }
+</style>

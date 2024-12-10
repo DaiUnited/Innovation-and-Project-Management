@@ -1,0 +1,545 @@
+﻿@model IEnumerable<DoAnChuyenNganh.Models.TinTuc>
+@{
+    ViewData["Title"] = "Đổi Mới Sáng Tạo và Khởi Nghiệp";
+}
+
+<!-- Hero Section -->
+<div class="hero-section position-relative">
+    <!-- Video Background -->
+    <video autoplay muted loop playsinline class="bg-video">
+        <source src="~/clip/video-bg.mp4" type="video/mp4">
+    </video>
+
+    <!-- Content -->
+    <div class="container text-center text-white position-absolute top-50 start-50 translate-middle">
+        <h1 style="color: lightgreen" class="display-3 fw-bold mb-4">Đổi Mới Sáng Tạo và Khởi Nghiệp</h1>
+        <p class="lead fs-4 mb-3">"Innovation towards a green future"</p>
+        <div id="liveClock" class="fs-3 fw-bold mb-4"></div>
+        <!-- Tìm kiếm -->
+        <div class="input-group mt-3" style="max-width: 500px; margin: 0 auto;">
+            <input type="text" class="form-control search-box" id="search-input" placeholder="Tìm kiếm tin tức..." aria-label="Tìm kiếm tin tức">
+            <button class="btn btn-search" id="search-btn">Tìm kiếm</button>
+        </div>
+    </div>
+</div>
+
+<!-- About Section -->
+<div class="container-fluid py-5 bg-gradient-light">
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <div class="col-lg-5 wow fadeIn" data-wow-delay="0.5s">
+                <img src="~/img/innovation_bg.jpg" alt="About Image" class="img-fluid rounded shadow">
+            </div>
+            <div class="col-lg-7 wow fadeIn" data-wow-delay="0.5s">
+                <h4 class="text-primary mb-4">Giới Thiệu Nền Tảng</h4>
+                <h1 class="display-5 mb-4">Hỗ Trợ Sinh Viên Đổi Mới Sáng Tạo</h1>
+                <p class="text-dark">
+                    Nền tảng quản lý các cuộc thi đổi mới sáng tạo giúp kết nối giảng viên, sinh viên và các chuyên gia. Với giao diện dễ sử dụng, hệ thống cung cấp thông tin về đề tài, sự kiện, và những cơ hội phát triển khởi nghiệp.
+                </p>
+                <div class="row g-4">
+                    <div class="col-md-6 wow fadeIn" data-wow-delay="0.5s">
+                        <h5><i class="fas fa-check-circle text-primary me-2"></i>Quản lý đề tài</h5>
+                        <p class="text-muted">Cập nhật và quản lý tiến trình các đề tài khởi nghiệp.</p>
+                    </div>
+                    <div class="col-md-6 wow fadeIn" data-wow-delay="0.5s">
+                        <h5><i class="fas fa-check-circle text-primary me-2"></i>Sự kiện nổi bật</h5>
+                        <p class="text-muted">Tham gia các hội thảo và buổi giao lưu với chuyên gia.</p>
+                    </div>
+                </div>
+                <a href="/Home/GioiThieu" class="btn btn-primary px-5 py-3 mt-3 wow fadeIn" data-wow-delay="0.5s">Khám Phá Ngay</a>
+            </div>
+        </div>
+    </div>
+</div>
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <!-- Nội dung bên trái -->
+            <div class="col-md-6 wow fadeIn" data-wow-delay="0.5s">
+                <h2 class="text-primary">Mục đích và ý nghĩa</h2>
+                <p class="text-muted fs-5">Cuộc thi nhằm thúc đẩy tinh thần khởi nghiệp, hỗ trợ sinh viên hiện thực hóa các ý tưởng sáng tạo, góp phần phát triển kinh tế xã hội bền vững.</p>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-check-circle text-success me-2"></i> Tạo giá trị cho bản thân và cộng đồng.</li>
+                    <li><i class="fas fa-check-circle text-success me-2"></i> Kết nối hệ sinh thái khởi nghiệp.</li>
+                    <li><i class="fas fa-check-circle text-success me-2"></i> Hỗ trợ triển khai các dự án thực tế.</li>
+                </ul>
+                <a href="/Home/GioiThieu" class="btn btn-outline-primary mt-3 px-4 py-2 wow fadeIn" data-wow-delay="0.5s">Xem thêm</a>
+            </div>
+
+            <!-- Hình ảnh bên phải -->
+            <div class="col-md-6 text-center wow fadeIn" data-wow-delay="0.5s">
+                <img src="~/img/huit_lib.jpg" alt="Khởi Nghiệp" class="img-fluid rounded shadow-lg">
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Features Section -->
+<section class="features py-5 text-white">
+    <div class="container">
+        <h2 class="text-center mb-4 fw-bold">Tại sao bạn nên tham gia?</h2>
+        <div class="row text-center">
+            <div class="col-md-4 wow fadeIn" data-wow-delay="0.2s">
+                <div class="feature-box p-4 shadow-lg bg-gradient rounded">
+                    <i class="fas fa-lightbulb fa-3x mb-3"></i>
+                    <h5>Học hỏi và sáng tạo</h5>
+                    <p class="fs-6">Phát triển ý tưởng đổi mới sáng tạo, kết hợp giữa lý thuyết và thực hành.</p>
+                </div>
+            </div>
+            <div class="col-md-4 wow fadeIn" data-wow-delay="0.4s">
+                <div class="feature-box p-4 shadow-lg bg-gradient rounded">
+                    <i class="fas fa-handshake fa-3x mb-3"></i>
+                    <h5>Kết nối doanh nghiệp</h5>
+                    <p class="fs-6">Gặp gỡ các chuyên gia, cố vấn và nhà đầu tư tiềm năng.</p>
+                </div>
+            </div>
+            <div class="col-md-4 wow fadeIn" data-wow-delay="0.6s">
+                <div class="feature-box p-4 shadow-lg bg-gradient rounded">
+                    <i class="fas fa-trophy fa-3x mb-3"></i>
+                    <h5>Giải thưởng hấp dẫn</h5>
+                    <p class="fs-6">Nhận phần thưởng giá trị và cơ hội phát triển dự án của bạn.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Timeline Section -->
+<section class="timeline py-5">
+    <div class="container">
+        <h2 class="text-center text-primary fw-bold mb-5">Mốc thời gian quan trọng</h2>
+        <div class="timeline-wrapper">
+            <div class="timeline-item">
+                <span class="timeline-date">20/4/2024 - 31/5/2024</span>
+                <h4>Vòng loại</h4>
+                <p class="text-muted">Các đội thi gửi đăng ký và được đánh giá online để chọn vào vòng tiếp theo.</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">1/6/2024 - 27/7/2024</span>
+                <h4>Vòng bán kết</h4>
+                <p class="text-muted">Các đội tham gia đào tạo và trình bày dự án tại ngày hội Startup Open Day.</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-date">27/7/2024 - 29/9/2024</span>
+                <h4>Vòng chung kết</h4>
+                <p class="text-muted">Chấm điểm trực tiếp, bình chọn và trao giải thưởng lớn cho đội xuất sắc nhất.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="award-structure">
+    <div class="container py-5">
+        <h1 class="text-center text-gradient mb-5 display-4 fw-bold">
+            CƠ CẤU GIẢI THƯỞNG
+        </h1>
+        <div class="row g-4 justify-content-center">
+            <!-- Bảng 1 -->
+            <div class="col-md-4">
+                <div class="award-card shadow-lg">
+                    <div style="background: linear-gradient(90deg, red, orangered, gold);" class="card-header text-center text-white py-4">
+                        <h3 style="color: whitesmoke" class="mb-2">Hạng Nhất</h3>
+                        <p class="fw-light">Tiền Thưởng và Phần Thưởng tặng kèm cho đội Hạng Nhất gồm:</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-medal text-gold me-2"></i>
+                                <strong>Giải Nhất:</strong> 10.000.000 đồng
+                            </li>
+                            <li>
+                                <strong>🎁 Phần Thưởng:</strong>Gói hỗ trợ triển khai dự án trị giá 40 triệu đồng + Gói mentor trị giá 30 triệu đồng trong vòng 01 năm + Giấy khen + Cúp + Kỷ niệm chương.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Bảng 2 -->
+            <div class="col-md-4">
+                <div class="award-card shadow-lg">
+                    <div class="card-header text-center text-white bg-gradient-success py-4">
+                        <h3 style="color: whitesmoke" class="mb-2">Hạng Nhì</h3>
+                        <p class="fw-light">Tiền Thưởng và Phần Thưởng tặng kèm cho đội Hạng Nhì gồm:</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-award text-silver me-2"></i>
+                                <strong>Giải Nhì:</strong> 8.000.000 đồng
+                            </li>
+                            <li>
+                                <strong>🎁 Phần Thưởng:</strong>Gói hỗ trợ triển khai dự án trị giá 40 triệu đồng + Gói mentor trị giá 30 triệu đồng trong vòng 01 năm + Giấy khen + Kỷ niệm chương.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- Bảng 3 -->
+            <div class="col-md-4">
+                <div class="award-card shadow-lg">
+                    <div class="card-header text-center text-white bg-gradient-primary py-4">
+                        <h3 style="color: whitesmoke" class="mb-2">Hạng Ba</h3>
+                        <p class="fw-light">Tiền Thưởng và Phần Thưởng tặng kèm cho đội Hạng Ba gồm:</p>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-unstyled">
+                            <li>
+                                <i class="fas fa-award text-bronze me-2"></i>
+                                <strong>Giải Ba:</strong> 6.000.000 đồng
+                            </li>
+                            <li>
+                                <strong>🎁 Phần Thưởng:</strong>Gói hỗ trợ triển khai dự án trị giá 40 triệu đồng + Gói mentor trị giá 30 triệu đồng trong vòng 01 năm + Giấy khen + Kỷ niệm chương.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Info -->
+        <div class="mt-5 additional-info text-center">
+            <div class="p-4 rounded bg-light shadow-lg">
+                <h4 class="text-primary fw-bold mb-3">
+                    GIẢI KHUYẾN KHÍCH
+                </h4>
+                <p class="fs-5">
+                    <i class="fas fa text-info me-2"></i>
+                    <strong>🏅 Giải Khuyến Khích:</strong> Giải thưởng 3.000.000 đồng
+                </p>
+                <p class="fs-5">
+                    <i class="fas fa text-success me-2"></i>
+                    <strong>🎁 Phần Thưởng:</strong> Gói mentor trị giá 30 triệu đồng trong vòng 01 năm + Giấy khen + Kỷ niệm chương.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Call to Action Section -->
+<section class="latest-news py-5">
+    <div class="container">
+        <h2 class="text-center text-primary fw-bold mb-4">TIN TỨC</h2>
+        <hr class="w-25 mx-auto mb-4 text-primary">
+
+        <!-- Carousel -->
+        <div id="newsCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                @for (int i = 0; i < Model.Count(); i += 3)
+                {
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="row">
+                            @for (int j = i; j < i + 3 && j < Model.Count(); j++)
+                            {
+                                var tin = Model.ElementAt(j);
+                                <div class="col-lg-4 mb-3">
+                                    <div class="card h-100 border-0 shadow">
+                                        <img src="@Url.Content(tin.AnhBia)" class="card-img-top rounded" alt="@tin.TieuDe">
+                                        <div class="card-body">
+                                            <h5 class="card-title text-primary fw-bold">@tin.TieuDe</h5>
+                                            <p class="text-muted mb-2">
+                                                <i class="far fa-calendar-alt me-1"></i>@tin.NgayTao.ToString("dd/MM/yyyy")
+                                            </p>
+                                            <p class="card-text text-dark">@tin.MoTa.Substring(0, Math.Min(tin.MoTa.Length, 100))...</p>
+                                            <a href="@Url.Action("ChiTietTinTuc", "Home", new { id = tin.MaTinTuc })" class="btn btn-primary">Xem chi tiết</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#newsCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#newsCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- CSS for Stunning -->
+<style>
+
+    .search-box {
+        background-color: rgba(255, 255, 255, 0.4); /* Màu nền xuyên thấu */
+        border: none;
+        border-radius: 30px 0 0 30px;
+        font-size: 1rem;
+        padding: 10px 20px;
+        color: #000;
+        transition: box-shadow 0.3s;
+    }
+
+        .search-box::placeholder {
+            color: #000;
+            font-style: italic;
+        }
+
+        .search-box:focus {
+            outline: none;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.6); /* Hiệu ứng khi focus */
+        }
+
+    /* Nút tìm kiếm */
+    .btn-search {
+        background-color: #00aaff; /* Màu xanh mây trời */
+        color: white;
+        border: none;
+        border-radius: 0 30px 30px 0;
+        font-size: 1rem;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .btn-search:hover {
+            background-color: #007bbd; /* Màu đậm hơn khi hover */
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.6); /* Hiệu ứng hover */
+        }
+    /* Hero Section Styling */
+
+    .text-gradient {
+        background: linear-gradient(to right, #ff8c00, #ff0080);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-section {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%; /* Đặt chiều rộng bằng 100% */
+        max-width: 100%; /* Đảm bảo không vượt quá kích thước màn hình */
+        height: 55vh;
+        overflow: hidden;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    }
+
+        .hero-section .container {
+            max-width: 1200px;
+            text-align: center;
+            z-index: 2;
+            transform: translateX(-20px); /* Điều chỉnh nội dung nếu cần */
+        }
+
+    .bg-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+        filter: brightness(0.7); /* Slight dim effect */
+    }
+
+
+    .hero-section h1 {
+        text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+        font-size: 2.5rem; /* Adjusted size to fit proportion */
+    }
+
+    .hero-section p {
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.8);
+        font-size: 1.2rem;
+    }
+
+    #liveClock {
+        color: #fff;
+        text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.7);
+        font-size: 1.5rem;
+    }
+
+    /* Features Section */
+    .features {
+        background: linear-gradient(135deg, #ff7e5f, #feb47b);
+        padding: 60px 0;
+    }
+
+    /* Timeline Section */
+    .timeline-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding: 20px;
+        background: white;
+        border-left: 5px solid #007bff;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+    }
+
+    .timeline-date {
+        position: absolute;
+        top: -10px;
+        left: -5px;
+        background: #007bff;
+        color: white;
+        font-weight: bold;
+        padding: 5px 10px;
+        border-radius: 5px;
+    }
+
+    /* Call to Action Section */
+    .cta {
+        background: linear-gradient(135deg, #2193b0, #6dd5ed);
+        padding: 50px 0;
+    }
+
+    .award-structure h1.text-gradient {
+        background: linear-gradient(90deg, #ff5722, #673ab7, #00bcd4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: gradient-text 3s ease infinite;
+    }
+
+    .card-header {
+        font-size: 1.2rem;
+        border-radius: 8px 8px 0 0;
+        text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .bg-gradient-success {
+        background: linear-gradient(90deg, #43a047, #66bb6a);
+    }
+
+    .bg-gradient-primary {
+        background: linear-gradient(90deg, #2196f3, #64b5f6);
+    }
+
+    .bg-gradient-warning {
+        background: linear-gradient(90deg, #ffa000, #ffb74d);
+    }
+
+    .text-gold {
+        color: #ffd700;
+    }
+
+    .text-silver {
+        color: #c0c0c0;
+    }
+
+    .text-bronze {
+        color: #cd7f32;
+    }
+
+    .additional-info {
+        background: linear-gradient(135deg, #f3e5f5, #e1bee7, #ba68c8);
+        color: #4a148c;
+    }
+
+        .additional-info i {
+            font-size: 1.5rem;
+            vertical-align: middle;
+        }
+
+    .award-card {
+        border: none;
+        border-radius: 12px;
+        overflow: hidden;
+        background: white;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .award-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .award-card ul li {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+    .bg-gradient-light {
+        background: linear-gradient(90deg, #f9fbe7, #c8e6c9);
+    }
+
+        .bg-gradient-light h4 {
+            font-size: 1.5rem;
+        }
+
+    .shadow-lg {
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    .latest-news h2 {
+        font-size: 2.5rem;
+        color: #007bff;
+    }
+
+    .card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+    }
+
+    .btn-primary {
+        background: #007bff;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .btn-primary:hover {
+            background: #0056b3;
+        }
+
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const carouselElement = document.querySelector('#newsCarousel');
+        new bootstrap.Carousel(carouselElement, {
+            interval: 5000,
+            ride: 'carousel'
+        });
+    });
+
+    document.getElementById("search-btn").addEventListener("click", function () {
+        const query = document.getElementById("search-input").value.trim();
+        if (query) {
+            window.location.href = `/Home/DanhSachTinTuc?search=${encodeURIComponent(query)}`;
+        }
+    });
+
+    // Live Clock Function
+    function updateClock() {
+        const clock = document.getElementById("liveClock");
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, "0");
+        const minutes = now.getMinutes().toString().padStart(2, "0");
+        const seconds = now.getSeconds().toString().padStart(2, "0");
+        clock.textContent = `${hours}:${minutes}:${seconds}`;
+    }
+
+    // Start Live Clock
+    setInterval(updateClock, 1000);
+    updateClock();
+</script>

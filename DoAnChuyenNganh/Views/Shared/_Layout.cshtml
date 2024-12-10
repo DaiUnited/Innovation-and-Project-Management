@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Đổi Mới Sáng Tạo và Khởi Nghiệp</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@600;700&family=Montserrat:wght@200;400;600&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="~/lib/animate/animate.min.css" rel="stylesheet">
+    <link href="~/lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="~/lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="~/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="~/css/style.css" rel="stylesheet">
+
+
+
+    <style>
+    /* Footer Gradient Background */
+        body {
+        background: url('https://www.veeforu.com/wp-content/uploads/2024/07/White-Color-Abstract-Background-4k-Download.png') no-repeat center center fixed;
+        background-size: cover;
+        font-family: "Arial", sans-serif;
+    }
+        .header {
+            background: linear-gradient(90deg, #ff007f, #ff4500, #ffdd00);
+            background-size: 200% 200%;
+            animation: gradient-animation 5s infinite;
+            color: white;
+            padding: 15px 0;
+        }
+
+            .header h1 {
+                font-size: 2rem;
+                font-family: 'Fredoka', sans-serif;
+                color: #fff;
+                text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            }
+
+    .footer {
+        background: linear-gradient(90deg, #8e44ad, #3498db, #e91e63);
+        color: white;
+        padding-top: 30px;
+        padding-bottom: 30px;
+        font-family: 'Montserrat', sans-serif;
+        animation: gradient-animation 5s infinite;
+    }
+
+    /* Footer Title Styling */
+    .footer h5 {
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    /* Footer List Items */
+    .footer ul {
+        list-style: none;
+        padding-left: 0;
+    }
+
+    .footer ul li {
+        font-size: 1rem;
+        line-height: 1.8;
+    }
+
+    .footer ul li i {
+        font-size: 1.2rem;
+    }
+
+    /* Social Icon Colors */
+    .text-facebook {
+        color: #3b5998;
+    }
+
+    .text-instagram {
+        color: #e4405f;
+    }
+
+    .text-tiktok {
+        color: #000;
+    }
+
+        /* Icon Zalo Styling */
+        .icon-zalo {
+            width: 30px;
+            height: 30px;
+            transition: all 0.3s ease-in-out;
+            filter: drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.2));
+            margin-bottom: 15px;
+        }
+
+            .icon-zalo:hover {
+                transform: scale(1.2);
+                filter: drop-shadow(0px 0px 10px rgba(0, 0, 255, 0.4));
+            }
+
+
+    .text-youtube {
+        color: #ff0000;
+    }
+
+    /* Icon Hover Effect */
+    .social-icons a {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .social-icons a:hover {
+        transform: scale(1.2);
+        opacity: 0.8;
+    }
+
+
+    .footer {
+        background-size: 200% 200%;
+    }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- Spinner Start -->
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
+    <!-- Header Start -->
+    <header class="header">
+        <div class="container-fluid border-bottom bg-light wow fadeIn" data-wow-delay="0.1s">
+            <div class="container px-0">
+                <nav class="navbar navbar-light navbar-expand-xl py-3">
+                    <a href="/" class="navbar-brand">
+                        <h1 class="text-primary display-6">HU<span class="text-secondary">IT</span></h1>
+                    </a>
+                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                        <span class="fa fa-bars text-primary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <div class="navbar-nav mx-auto">
+                            <a href="/" class="nav-item nav-link active">Trang chủ</a>
+                            <a href="/Home/GioiThieu" class="nav-item nav-link">Giới thiệu</a>
+                            <a href="/Home/TheLe" class="nav-item nav-link">Thể lệ</a>
+                            <a href="/Home/DanhSachTinTuc" class="nav-item nav-link">Tin tức</a>
+                            <a href="https://virtual-event.huit.edu.vn/clientMainHall" class="nav-item nav-link">Nền tảng thực tế ảo</a>
+                        </div>
+                        <div class="d-flex">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <div class="dropdown">
+                                    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                        Xin chào, @User.Identity.Name
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <li><a class="dropdown-item" href="/Admin/Home/Index">Trang quản trị</a></li>
+                                        }
+                                        @if (User.IsInRole("Ban giám khảo"))
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("ThongTinCaNhan", "Home", new { area = "BGK" })">Thông tin BGK</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("DoiMatKhau", "Home", new { area = "BGK" })">Đổi mật khẩu</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("ChamDiem", "ChamDiem", new { area = "BGK" })">Chấm điểm</a></li>
+                                        }
+                                        @if (User.IsInRole("Giảng viên hướng dẫn"))
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("ThongTinCaNhan", "Home", new { area = "GVHD" })">Thông tin GVHD</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("DoiMatKhau", "Home", new { area = "GVHD" })">Đổi mật khẩu</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("ThongTinDeTai", "TheoDoi", new { area = "GVHD" })">Theo dõi đề tài</a></li>
+                                        }
+                                        @if (User.IsInRole("Sinh viên"))
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("ThongTinCaNhan", "Home", new { area = "SV" })">Thông tin cá nhân</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("DoiMatKhau", "Home", new { area = "SV" })">Đổi mật khẩu</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("ThongTinDeTai", "NopDeTai", new { area = "SV" })">Đề tài của nhóm</a></li>
+                                        }
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" href="/Account/Logout">Đăng xuất</a></li>
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <a href="/Account/Login" class="btn btn-primary">Đăng nhập</a>
+                            }
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <!-- Header End -->
+    <!-- Main Content Start -->
+    <main class="main-content container py-5">
+        @RenderBody()
+    </main>
+    <!-- Main Content End -->
+    <!-- Footer Start -->
+    <footer class="footer">
+        <div class="container-fluid py-5">
+            <div class="container">
+                <div class="row g-5">
+                    <!-- Thông Tin Liên Hệ -->
+                    <div class="col-md-6">
+                        <h5 class="text-white mb-4">Thông Tin Liên Hệ</h5>
+                        <ul class="list-unstyled text-white">
+                            <li class="mb-3">
+                                <i class="fas fa-university me-3 text-pink"></i>
+                                Trường Đại học Công Thương Thành phố Hồ Chí Minh
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-map-marker-alt me-3 text-red"></i>
+                                140 Lê Trọng Tấn, phường Tây Thạnh, quận Tân Phú, Tp. Hồ Chí Minh
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-phone-alt me-3 text-green"></i>
+                                028.38161673 - Số nội bộ 112
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-envelope me-3 text-yellow"></i>
+                                <a href="mailto:fid@huit.edu.vn" class="text-white">fid@huit.edu.vn</a>
+                            </li>
+                            <li class="mb-3">
+                                <i class="fas fa-globe me-3 text-blue"></i>
+                                <a href="https://fid.huit.edu.vn" class="text-white">https://fid.huit.edu.vn</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- Kết Nối Mạng Xã Hội -->
+                    <div class="col-md-6 text-md-end">
+                        <h5 class="text-white mb-4">Kết nối với chúng tôi</h5>
+                        <div class="social-icons">
+                            <a href="https://www.facebook.com/DhCongThuongHCM" class="me-3">
+                                <i class="fab fa-facebook fa-2x text-facebook"></i>
+                            </a>
+                            <a href="https://www.instagram.com/dh_congthuong/" class="me-3">
+                                <i class="fab fa-instagram fa-2x text-instagram"></i>
+                            </a>
+                            <a href="https://www.tiktok.com/huit_media" class="me-3">
+                                <i class="fab fa-tiktok fa-2x text-tiktok"></i>
+                            </a>
+                            <a href="https://zalo.me/4418938306145458374" class="me-3">
+                                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png" alt="Zalo" class="icon-zalo">
+                            </a>
+                            <a href="https://www.youtube.com/DHCongthuong" class="me-3">
+                                <i class="fab fa-youtube fa-2x text-youtube"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Footer End -->
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-primary border-3 border-primary rounded-circle back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="~/lib/wow/wow.min.js"></script>
+    <script src="~/lib/easing/easing.min.js"></script>
+    <script src="~/lib/waypoints/waypoints.min.js"></script>
+    <script src="~/lib/lightbox/js/lightbox.min.js"></script>
+    <script src="~/lib/owlcarousel/owl.carousel.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="~/js/main.js"></script>
+</body>
+
+</html>

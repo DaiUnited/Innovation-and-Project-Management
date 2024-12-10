@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "Đăng nhập";
+}
+
+    <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-xl-10">
+                <div class="card rounded-3 text-black">
+                    <div class="row g-0">
+                        <div class="col-lg-6">
+                            <div class="card-body p-md-5 mx-md-4">
+
+                                <div class="text-center">
+                                    <img src="https://imgcdn.tapchicongthuong.vn/thumb/w_1000/tcct-media/mr-trung/truong-dai-hoc-cong-nghiep-thuc-pham-tp-hcm-hufi-chinh-thuc-doi-ten-thanh-truong-dai-hoc-cong-thuong-tp-hcm-huit-2.jpg"
+                                         style="width: 185px;" alt="logo">
+                                    <h4 class="mt-1 mb-5 pb-1">Đăng Nhập</h4>
+                                </div>
+
+                                @if (ViewBag.Error != null)
+                                {
+                                    <div class="alert alert-danger">@ViewBag.Error</div>
+                                }
+
+                                <form method="post" asp-controller="Account" asp-action="Login">
+
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        <label class="form-label" for="username">Tên đăng nhập</label>
+                                        <input type="text" id="username" name="username" class="form-control"
+                                               placeholder="Nhập tên đăng nhập" required />
+                                    </div>
+
+                                    <div data-mdb-input-init class="form-outline mb-4">
+                                        <label class="form-label" for="password">Mật khẩu</label>
+                                        <input type="password" id="password" name="password" class="form-control" required />
+                                    </div>
+
+                                    <div class="text-center pt-1 mb-5 pb-1">
+                                        <button data-mdb-button-init data-mdb-ripple-init
+                                                class="btn btn-primary btn-block fa-lg gradient-custom-2 mb-3" type="submit">
+                                            Đăng nhập
+                                        </button>
+                                    </div>
+                                <div class="text-center">
+                                    <a href="@Url.Action("ForgotPassword", "Account")" class="text-primary">Quên mật khẩu?</a>
+                                </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+                        <div class="col-lg-6 d-flex align-items-center gradient-custom-2">
+                            <div class="text-white px-3 py-4 p-md-5 mx-md-4">
+                                <h4 style="font-size:3.5rem; color: dodgerblue" class="text-center mb-4">HUIT</h4>
+                                <p style="color: white" class="mb-0">
+                                    Trường Đại học Công Thương Thành phố Hồ Chí Minh (tiếng Anh: Ho Chi Minh City University of Industry and Trade; HUIT)
+                                    là một là một cơ sở giáo dục đại học công lập trực thuộc Bộ Công Thương, đào tạo đa ngành, đa lĩnh vực,
+                                    có thế mạnh trong lĩnh vực công nghiệp và thương mại, được thành lập ngày 9 tháng 9 năm 1982.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<style>
+    /* Áp dụng gradient cho background chỉ trong trang đăng nhập */
+    .gradient-custom-2 {
+        /* fallback for old browsers */
+        background: #fccb90;
+        /* Chrome 10-25, Safari 5.1-6 */
+        background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+        /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+        background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+    }
+
+    .gradient-form {
+        height: 100vh; /* Đảm bảo chiều cao chiếm toàn bộ màn hình */
+        bbackground: linear-gradient(135deg, #e8eaf6, #bbdefb, #b2ebf2, #ffcdd2); /* Gradient với màu đậm hơn */
+        background-size: 400% 400%; /* Tăng kích thước để tạo hiệu ứng chuyển động */
+        animation: rainbowAnimation 10s infinite; /* Áp dụng animation */
+    }
+
+    /* Chỉ xóa viền cho card trong trang đăng nhập */
+    .login-page .card {
+        border: none; /* Loại bỏ viền */
+        box-shadow: none; /* Loại bỏ bóng */
+    }
+
+    /* Điều chỉnh padding cho container trong trang đăng nhập */
+    .login-page .container {
+        padding: 0; /* Xóa padding */
+        margin: 0 auto; /* Canh giữa */
+    }
+
+    /* Form chỉnh sửa input */
+    .login-page .form-outline .form-control {
+        border: 1px solid #ccc; /* Đặt đường viền mỏng */
+        border-radius: 0.25rem; /* Góc bo tròn */
+        box-shadow: none; /* Xóa bóng */
+    }
+
+    /* Nút đăng nhập */
+    .login-page .btn {
+        border-radius: 0.5rem;
+        padding: 0.8rem 1.5rem;
+    }
+
+    /* Điều chỉnh layout bên phải */
+    .login-page .col-lg-6.d-flex {
+        align-items: center;
+        justify-content: center;
+    }
+
+</style>

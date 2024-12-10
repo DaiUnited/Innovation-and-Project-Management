@@ -1,0 +1,279 @@
+﻿@{
+    ViewData["Title"] = "Quản lý Sinh Viên";
+}
+
+<h2 class="text-center text-primary mb-4"><i class="fas fa-user-graduate"></i> Quản lý Sinh Viên</h2>
+<div class="d-flex justify-content-between mb-3">
+    <button class="btn btn-success" onclick="showAddModal()"><i class="fas fa-plus-circle"></i> Thêm Sinh Viên</button>
+    <div class="input-group w-50">
+        <input id="searchInput" type="text" class="form-control" placeholder="Tìm kiếm..." />
+        <button class="btn btn-primary" onclick="TimKiem()"><i class="fas fa-search"></i></button>
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-hover table-striped text-center align-middle" id="sinhVienTable">
+        <thead class="table-dark">
+            <tr>
+                <th>Id</th>
+                <th>Họ Tên</th>
+                <th>Lớp</th>
+                <th>Email</th>
+                <th>Số Điện Thoại</th>
+                <th>Khoa</th>
+                <th>Người Dùng</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody id="sinhVienList"></tbody>
+    </table>
+</div>
+
+<!-- Modal Form -->
+<div id="sinhVienModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="modalTitle"><i class="fas fa-edit"></i> Thêm/Sửa Sinh Viên</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="sinhVienForm">
+                    <input type="hidden" id="sinhVienId" name="Id" />
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3" id="maSVDiv">
+                            <label for="maSV" class="form-label">Mã Sinh Viên</label>
+                            <input type="text" id="maSV" name="MaSV" class="form-control" placeholder="Nhập mã sinh viên" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="hoTen" class="form-label">Họ Tên</label>
+                            <input type="text" id="hoTen" name="HoTen" class="form-control" placeholder="Nhập họ tên" required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="lop" class="form-label">Lớp</label>
+                            <input type="text" id="lop" name="Lop" class="form-control" placeholder="Nhập lớp" required />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" id="email" name="Email" class="form-control" placeholder="Nhập email" required />
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="soDienThoai" class="form-label">Số Điện Thoại</label>
+                            <input type="text" id="soDienThoai" name="SoDienThoai" class="form-control" placeholder="Nhập số điện thoại" />
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="maKhoa" class="form-label">Khoa</label>
+                            <select id="maKhoa" name="MaKhoa" class="form-select"></select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="maNguoiDung" class="form-label">Người Dùng</label>
+                        <select id="maNguoiDung" name="MaNguoiDung" class="form-select"></select>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Lưu</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times-circle"></i> Hủy</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<script>
+    $(document).ready(function () {
+        loadKhoas();
+        loadNguoiDungs();
+        loadSinhViens();
+
+        $("#sinhVienForm").on("submit", function (event) {
+            event.preventDefault();
+            saveSinhVien();
+        });
+    });
+
+    function loadKhoas() {
+        $.get("/Admin/Khoa/GetAll", function (data) {
+            const dropdown = $("#maKhoa");
+            dropdown.empty();
+            dropdown.append('<option value="">Chọn Khoa</option>');
+            data.forEach(khoa => {
+                dropdown.append(`<option value="${khoa.maKhoa}">${khoa.tenKhoa}</option>`);
+            });
+        });
+    }
+
+    function loadNguoiDungs() {
+        $.get("/Admin/NguoiDung/GetByRole?roleName=Sinh viên", function (data) {
+            const dropdown = $("#maNguoiDung");
+            dropdown.empty();
+            dropdown.append('<option value="">Chọn Người Dùng</option>');
+            data.forEach(nd => dropdown.append(`<option value="${nd.maNguoiDung}">${nd.tenDangNhap}</option>`));
+        });
+    }
+
+    function loadSinhViens() {
+        $.get("/Admin/SinhVien/GetAll", function (data) {
+            const tbody = $("#sinhVienList");
+            tbody.empty();
+
+            data.forEach((sv, index) => {
+                const rowClass = index % 2 === 0 ? "table-primary" : "table-light";
+                tbody.append(`
+                        <tr class="${rowClass}">
+                            <td><i class="fas fa-id-card text-secondary"></i> ${sv.maSV}</td>
+                            <td><i class="fas fa-user text-info"></i> ${sv.hoTen}</td>
+                            <td><i class="fas fa-chalkboard text-success"></i> ${sv.lop}</td>
+                            <td><i class="fas fa-envelope text-primary"></i> ${sv.email}</td>
+                            <td><i class="fas fa-phone text-warning"></i> ${sv.soDienThoai}</td>
+                            <td><i class="fas fa-university text-secondary"></i> ${sv.khoa}</td>
+                            <td><i class="fas fa-user-shield text-dark"></i> ${sv.nguoiDung}</td>
+                            <td>
+                                <button class="btn btn-warning btn-sm" onclick="editSinhVien(${sv.maSV})"><i class="fas fa-edit"></i> Edit</button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteSinhVien(${sv.maSV})"><i class="fas fa-trash-alt"></i> Delete</button>
+                            </td>
+                        </tr>
+                    `);
+            });
+        });
+    }
+
+    function TimKiem() {
+    const searchValue = $("#searchInput").val().toLowerCase();
+
+    $.get("/Admin/SinhVien/GetAll", function (data) {
+        const tbody = $("#sinhVienList");
+        tbody.empty();
+
+        // Lọc danh sách sinh viên theo từ khóa
+        const filteredData = data.filter(sv =>
+            sv.hoTen.toLowerCase().includes(searchValue) || // Tìm theo họ tên
+            sv.email.toLowerCase().includes(searchValue) || // Tìm theo email
+            sv.soDienThoai.includes(searchValue) || // Tìm theo số điện thoại
+            sv.lop.toLowerCase().includes(searchValue) || // Tìm theo lớp
+            sv.khoa.toLowerCase().includes(searchValue) // Tìm theo tên khoa
+        );
+
+                if (filteredData.length === 0) {
+            tbody.append('<tr><td colspan="8" class="text-center text-danger">Không tìm thấy sinh viên nào!</td></tr>');
+            return;
+        }
+
+        // Hiển thị dữ liệu đã lọc
+        filteredData.forEach((sv, index) => {
+            const rowClass = index % 2 === 0 ? "table-primary" : "table-light";
+            tbody.append(`
+                <tr class="${rowClass}">
+                    <td><i class="fas fa-id-card text-secondary"></i> ${sv.maSV}</td>
+                    <td><i class="fas fa-user text-info"></i> ${sv.hoTen}</td>
+                    <td><i class="fas fa-chalkboard text-success"></i> ${sv.lop}</td>
+                    <td><i class="fas fa-envelope text-primary"></i> ${sv.email}</td>
+                    <td><i class="fas fa-phone text-warning"></i> ${sv.soDienThoai}</td>
+                    <td><i class="fas fa-university text-secondary"></i> ${sv.khoa}</td>
+                    <td><i class="fas fa-user-shield text-dark"></i> ${sv.nguoiDung}</td>
+                    <td>
+                        <button class="btn btn-warning btn-sm" onclick="editSinhVien(${sv.maSV})"><i class="fas fa-edit"></i> Edit</button>
+                        <button class="btn btn-danger btn-sm" onclick="deleteSinhVien(${sv.maSV})"><i class="fas fa-trash-alt"></i> Delete</button>
+                    </td>
+                </tr>
+            `);
+        });
+    });
+}
+
+
+
+    function saveSinhVien() {
+        const id = $("#sinhVienId").val();
+        const formData = new FormData();
+
+        if (!id) {
+            formData.append("MaSV", $("#maSV").val());
+        }
+
+        formData.append("HoTen", $("#hoTen").val());
+        formData.append("Lop", $("#lop").val());
+        formData.append("Email", $("#email").val());
+        formData.append("SoDienThoai", $("#soDienThoai").val());
+        formData.append("MaKhoa", $("#maKhoa").val());
+        formData.append("MaNguoiDung", $("#maNguoiDung").val());
+
+        const url = id ? `/Admin/SinhVien/Update/${id}` : "/Admin/SinhVien/Create";
+        const type = id ? "PUT" : "POST";
+
+        $.ajax({
+            url: url,
+            type: type,
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function () {
+                hideModal();
+                loadSinhViens();
+                alert("Thao tác thành công!");
+            },
+            error: function (xhr) {
+                alert(xhr.responseText || "Có lỗi xảy ra khi lưu thông tin sinh viên!");
+            }
+        });
+    }
+
+    function deleteSinhVien(id) {
+        if (confirm("Bạn có chắc chắn muốn xóa sinh viên này?")) {
+            $.ajax({
+                url: `/Admin/SinhVien/Delete/${id}`,
+                type: "DELETE",
+                success: function () {
+                    loadSinhViens();
+                    alert("Xóa thành công!");
+                },
+                error: function (xhr) {
+                    alert(xhr.responseText || "Có lỗi xảy ra khi xóa sinh viên!");
+                }
+            });
+        }
+    }
+
+
+    function editSinhVien(id) {
+        $.get(`/Admin/SinhVien/GetById?id=${id}`, function (data) {
+            $("#sinhVienId").val(data.maSV);
+            $("#hoTen").val(data.hoTen);
+            $("#lop").val(data.lop);
+            $("#email").val(data.email);
+            $("#soDienThoai").val(data.soDienThoai);
+            $("#maKhoa").val(data.maKhoa);
+            $("#maNguoiDung").val(data.maNguoiDung);
+
+            $("#maSVDiv").hide();
+            $("#modalTitle").text("Sửa Sinh Viên");
+            $("#sinhVienModal").modal("show");
+        });
+    }
+
+    function hideModal() {
+        $("#sinhVienModal").modal("hide");
+    }
+
+    function showAddModal() {
+        $("#sinhVienForm")[0].reset();
+        $("#sinhVienId").val('');
+        $("#maSVDiv").show();
+        $("#modalTitle").text("Thêm Sinh Viên");
+        $("#sinhVienModal").modal("show");
+    }
+</script>
